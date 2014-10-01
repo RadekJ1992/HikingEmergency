@@ -14,6 +14,14 @@
 		45736DAC19D9C9DA00A485D6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45736DAB19D9C9DA00A485D6 /* Images.xcassets */; };
 		45736DAF19D9C9DA00A485D6 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 45736DAD19D9C9DA00A485D6 /* LaunchScreen.xib */; };
 		45736DBB19D9C9DA00A485D6 /* HikingEmergencyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 45736DBA19D9C9DA00A485D6 /* HikingEmergencyTests.m */; };
+		45736DC519D9CD6000A485D6 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 45736DC419D9CD6000A485D6 /* Settings.bundle */; };
+		45736DC719D9CF7A00A485D6 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45736DC619D9CF7A00A485D6 /* CoreLocation.framework */; };
+		45736DC919D9CF8100A485D6 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45736DC819D9CF8100A485D6 /* MessageUI.framework */; };
+		45736DCB19D9CF9000A485D6 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 45736DCA19D9CF9000A485D6 /* libsqlite3.dylib */; };
+		45736DCD19D9CF9F00A485D6 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45736DCC19D9CF9F00A485D6 /* MapKit.framework */; };
+		45736DDD19DC6C3800A485D6 /* DBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 45736DD819DC6C3800A485D6 /* DBManager.m */; };
+		45736DDE19DC6C3800A485D6 /* MapPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 45736DDA19DC6C3800A485D6 /* MapPin.m */; };
+		45736DDF19DC6C3800A485D6 /* TCPManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 45736DDC19DC6C3800A485D6 /* TCPManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +48,17 @@
 		45736DB419D9C9DA00A485D6 /* HikingEmergencyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HikingEmergencyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		45736DB919D9C9DA00A485D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		45736DBA19D9C9DA00A485D6 /* HikingEmergencyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HikingEmergencyTests.m; sourceTree = "<group>"; };
+		45736DC419D9CD6000A485D6 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		45736DC619D9CF7A00A485D6 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		45736DC819D9CF8100A485D6 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		45736DCA19D9CF9000A485D6 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		45736DCC19D9CF9F00A485D6 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		45736DD719DC6C3800A485D6 /* DBManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBManager.h; sourceTree = "<group>"; };
+		45736DD819DC6C3800A485D6 /* DBManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBManager.m; sourceTree = "<group>"; };
+		45736DD919DC6C3800A485D6 /* MapPin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapPin.h; sourceTree = "<group>"; };
+		45736DDA19DC6C3800A485D6 /* MapPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapPin.m; sourceTree = "<group>"; };
+		45736DDB19DC6C3800A485D6 /* TCPManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCPManager.h; sourceTree = "<group>"; };
+		45736DDC19DC6C3800A485D6 /* TCPManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCPManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +66,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				45736DCD19D9CF9F00A485D6 /* MapKit.framework in Frameworks */,
+				45736DCB19D9CF9000A485D6 /* libsqlite3.dylib in Frameworks */,
+				45736DC919D9CF8100A485D6 /* MessageUI.framework in Frameworks */,
+				45736DC719D9CF7A00A485D6 /* CoreLocation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +86,11 @@
 		45736D9219D9C9D900A485D6 = {
 			isa = PBXGroup;
 			children = (
+				45736DCC19D9CF9F00A485D6 /* MapKit.framework */,
+				45736DCA19D9CF9000A485D6 /* libsqlite3.dylib */,
+				45736DC819D9CF8100A485D6 /* MessageUI.framework */,
+				45736DC619D9CF7A00A485D6 /* CoreLocation.framework */,
+				45736DC419D9CD6000A485D6 /* Settings.bundle */,
 				45736D9D19D9C9DA00A485D6 /* HikingEmergency */,
 				45736DB719D9C9DA00A485D6 /* HikingEmergencyTests */,
 				45736D9C19D9C9DA00A485D6 /* Products */,
@@ -88,6 +116,12 @@
 				45736DA819D9C9DA00A485D6 /* Main.storyboard */,
 				45736DAB19D9C9DA00A485D6 /* Images.xcassets */,
 				45736DAD19D9C9DA00A485D6 /* LaunchScreen.xib */,
+				45736DD719DC6C3800A485D6 /* DBManager.h */,
+				45736DD819DC6C3800A485D6 /* DBManager.m */,
+				45736DD919DC6C3800A485D6 /* MapPin.h */,
+				45736DDA19DC6C3800A485D6 /* MapPin.m */,
+				45736DDB19DC6C3800A485D6 /* TCPManager.h */,
+				45736DDC19DC6C3800A485D6 /* TCPManager.m */,
 				45736D9E19D9C9DA00A485D6 /* Supporting Files */,
 			);
 			path = HikingEmergency;
@@ -199,6 +233,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				45736DC519D9CD6000A485D6 /* Settings.bundle in Resources */,
 				45736DAA19D9C9DA00A485D6 /* Main.storyboard in Resources */,
 				45736DAF19D9C9DA00A485D6 /* LaunchScreen.xib in Resources */,
 				45736DAC19D9C9DA00A485D6 /* Images.xcassets in Resources */,
@@ -220,8 +255,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				45736DA719D9C9DA00A485D6 /* ViewController.m in Sources */,
+				45736DDE19DC6C3800A485D6 /* MapPin.m in Sources */,
 				45736DA419D9C9DA00A485D6 /* AppDelegate.m in Sources */,
 				45736DA119D9C9DA00A485D6 /* main.m in Sources */,
+				45736DDD19DC6C3800A485D6 /* DBManager.m in Sources */,
+				45736DDF19DC6C3800A485D6 /* TCPManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,6 +450,7 @@
 				45736DC019D9C9DA00A485D6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		45736DC119D9C9DA00A485D6 /* Build configuration list for PBXNativeTarget "HikingEmergencyTests" */ = {
 			isa = XCConfigurationList;
@@ -420,6 +459,7 @@
 				45736DC319D9C9DA00A485D6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
