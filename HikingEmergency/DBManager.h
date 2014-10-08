@@ -1,6 +1,15 @@
+//
+//  DBManager.h
+//  HikingEmergency
+//
+//  Created by Radosław Jarzynka on 06.10.2014.
+//  Copyright (c) 2014 Radosław Jarzynka. All rights reserved.
+//
+
 #import <Foundation/Foundation.h>
 #import <sqlite3.h>
 #import "MapPin.h"
+#import "Route.h"
 /**
  Singleton obsługujący połączenie z bazą danych
  W bazie danych jest tabela przechowująca historię lokalizacji użytkownika
@@ -25,7 +34,20 @@
 //pobranie ostatniej lokalizacji użytkownika
 -(MapPin*) getLastUserLocation;
 
+//Wprowadzenie nowej trasy do bazy
+-(BOOL) createNewRoute:(Route*) route;
+
+//Wstawienie nowej trasy do bazy
+-(Route*) getRouteWithName:(NSString*) name;
+
+//Pobranie wszystkich nazw tras z bazy
+-(NSArray*) getAllRoutesNames;
+
+//Usunięcie trasy
+-(BOOL) deleteRouteWithName:(NSString*) name;
+
 //wymuszenie zamknięcia połączenia (jakby coś się popsuło)
 -(void) forceCloseDatabase;
+
 
 @end

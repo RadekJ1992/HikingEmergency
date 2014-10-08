@@ -1,3 +1,11 @@
+//
+//  TCPManager.m
+//  HikingEmergency
+//
+//  Created by Radosław Jarzynka on 07.10.2014.
+//  Copyright (c) 2014 Radosław Jarzynka. All rights reserved.
+//
+
 #import "TCPManager.h"
 
 @implementation TCPManager

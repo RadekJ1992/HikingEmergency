@@ -1,6 +1,13 @@
+//
+//  TCPManager.h
+//  HikingEmergency
+//
+//  Created by Radosław Jarzynka on 07.10.2014.
+//  Copyright (c) 2014 Radosław Jarzynka. All rights reserved.
+//
+
 #import <Foundation/Foundation.h>
 #import "DBManager.h"
-#import "Event.h"
 /**
  Singleton obsługujący połączenie TCP z serwerem
  */
