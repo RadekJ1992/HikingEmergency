@@ -41,7 +41,7 @@
 -(Route*) getRouteWithName:(NSString*) name;
 
 //Pobranie wszystkich nazw tras z bazy
--(NSArray*) getAllRoutesNames;
+-(NSMutableArray*) getAllRoutesNames;
 
 //Usunięcie trasy
 -(BOOL) deleteRouteWithName:(NSString*) name;

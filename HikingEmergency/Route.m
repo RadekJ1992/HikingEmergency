@@ -13,7 +13,7 @@
 @synthesize routeName;
 @synthesize routePoints;
 
--(NSArray*) getRoutePoints {
+-(NSMutableArray*) getRoutePoints {
     return routePoints;
 }
 
@@ -21,7 +21,7 @@
     return routeName;
 }
 
--(id)initWithRouteName:(NSString*) name andRoutePoints:(NSArray*) points{
+-(id)initWithRouteName:(NSString*) name andRoutePoints:(NSMutableArray*) points{
     self = [super init];
     if (self) {
         self.routeName = name;
@@ -30,4 +30,12 @@
     return self;
 }
 
+-(id)init {
+    self = [super init];
+    if (self) {
+        self.routeName = [[NSString alloc] init];
+        self.routePoints = [[NSMutableArray alloc] init];
+    }
+    return self;
+}
 @end

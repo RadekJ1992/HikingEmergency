@@ -232,7 +232,7 @@ static sqlite3_stmt *statement = nil;
     return nil;
 }
 
--(NSArray*) getAllRoutesNames {
+-(NSMutableArray*) getAllRoutesNames {
     const char *dbpath = [databasePath UTF8String];
     if (sqlite3_open(dbpath, &database) == SQLITE_OK)
     {

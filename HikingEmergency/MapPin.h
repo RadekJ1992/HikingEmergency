@@ -16,5 +16,6 @@
 @property(nonatomic, assign) CLLocationCoordinate2D coordinate;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, assign) NSDate *date;
+@property (nonatomic, assign) NSUInteger index;
 
 @end

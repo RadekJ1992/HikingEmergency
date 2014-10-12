@@ -11,12 +11,12 @@
 
 @interface Route : NSObject
 
-@property (nonatomic, assign) NSString* routeName;
-@property (nonatomic, assign) NSArray* routePoints;
+@property (nonatomic, retain) NSString* routeName;
+@property (nonatomic, retain) NSMutableArray* routePoints;
 
 -(id)initWithRouteName:(NSString*) name andRoutePoints:(NSArray*) points;
 
--(NSArray*) getRoutePoints;
+-(NSMutableArray*) getRoutePoints;
 
 -(NSString*) getRouteName;
 

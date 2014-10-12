@@ -13,4 +13,5 @@
 @synthesize coordinate;
 @synthesize title;
 @synthesize date;
+@synthesize index;
 @end

@@ -23,6 +23,10 @@
 		45736DDE19DC6C3800A485D6 /* MapPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 45736DDA19DC6C3800A485D6 /* MapPin.m */; };
 		45736DDF19DC6C3800A485D6 /* TCPManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 45736DDC19DC6C3800A485D6 /* TCPManager.m */; };
 		45792AD819E576C4003558EE /* Route.m in Sources */ = {isa = PBXBuildFile; fileRef = 45792AD719E576C4003558EE /* Route.m */; };
+		458F315F19E930270003B89D /* RoutesListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 458F315E19E930270003B89D /* RoutesListViewController.m */; };
+		458F316219E932370003B89D /* CreateRouteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 458F316119E932370003B89D /* CreateRouteViewController.m */; };
+		458F316519E932480003B89D /* NavigateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 458F316419E932480003B89D /* NavigateViewController.m */; };
+		458F316819E9357B0003B89D /* WarningViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 458F316719E9357B0003B89D /* WarningViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +66,14 @@
 		45736DDC19DC6C3800A485D6 /* TCPManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCPManager.m; sourceTree = "<group>"; };
 		45792AD619E576C4003558EE /* Route.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Route.h; sourceTree = "<group>"; };
 		45792AD719E576C4003558EE /* Route.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Route.m; sourceTree = "<group>"; };
+		458F315D19E930270003B89D /* RoutesListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoutesListViewController.h; sourceTree = "<group>"; };
+		458F315E19E930270003B89D /* RoutesListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoutesListViewController.m; sourceTree = "<group>"; };
+		458F316019E932370003B89D /* CreateRouteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateRouteViewController.h; sourceTree = "<group>"; };
+		458F316119E932370003B89D /* CreateRouteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateRouteViewController.m; sourceTree = "<group>"; };
+		458F316319E932480003B89D /* NavigateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigateViewController.h; sourceTree = "<group>"; };
+		458F316419E932480003B89D /* NavigateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigateViewController.m; sourceTree = "<group>"; };
+		458F316619E9357B0003B89D /* WarningViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WarningViewController.h; sourceTree = "<group>"; };
+		458F316719E9357B0003B89D /* WarningViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WarningViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +140,14 @@
 				45792AD619E576C4003558EE /* Route.h */,
 				45792AD719E576C4003558EE /* Route.m */,
 				45736D9E19D9C9DA00A485D6 /* Supporting Files */,
+				458F315D19E930270003B89D /* RoutesListViewController.h */,
+				458F315E19E930270003B89D /* RoutesListViewController.m */,
+				458F316019E932370003B89D /* CreateRouteViewController.h */,
+				458F316119E932370003B89D /* CreateRouteViewController.m */,
+				458F316319E932480003B89D /* NavigateViewController.h */,
+				458F316419E932480003B89D /* NavigateViewController.m */,
+				458F316619E9357B0003B89D /* WarningViewController.h */,
+				458F316719E9357B0003B89D /* WarningViewController.m */,
 			);
 			path = HikingEmergency;
 			sourceTree = "<group>";
@@ -266,11 +286,15 @@
 			files = (
 				45736DA719D9C9DA00A485D6 /* ViewController.m in Sources */,
 				45736DDE19DC6C3800A485D6 /* MapPin.m in Sources */,
+				458F315F19E930270003B89D /* RoutesListViewController.m in Sources */,
 				45736DA419D9C9DA00A485D6 /* AppDelegate.m in Sources */,
+				458F316219E932370003B89D /* CreateRouteViewController.m in Sources */,
 				45736DA119D9C9DA00A485D6 /* main.m in Sources */,
 				45736DDD19DC6C3800A485D6 /* DBManager.m in Sources */,
+				458F316819E9357B0003B89D /* WarningViewController.m in Sources */,
 				45736DDF19DC6C3800A485D6 /* TCPManager.m in Sources */,
 				45792AD819E576C4003558EE /* Route.m in Sources */,
+				458F316519E932480003B89D /* NavigateViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
