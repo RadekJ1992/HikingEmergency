@@ -50,26 +50,28 @@
 }
 
 -(void)handleLongPressGesture:(UIGestureRecognizer*)sender {
-    if (!route) {
-        route = [[Route alloc] init];
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        if (!route) {
+            route = [[Route alloc] init];
+        }
+        MapPin* pin = [[MapPin alloc] init];
+        CGPoint point = [sender locationInView:self.mapView];
+        CLLocationCoordinate2D locCoord = [self.mapView convertPoint:point toCoordinateFromView:self.mapView];
+        MKCoordinateRegion region = { { 0.0, 0.0 }, { 0.0, 0.0 } };
+        region.center.latitude = locCoord.latitude;
+        region.center.longitude = locCoord.longitude;
+        region.span.longitudeDelta = 0.01f;
+        region.span.latitudeDelta = 0.01f;
+        pin.coordinate = region.center;
+        //ustaw "Title" jako indeks
+        [pin setTitle: [NSString stringWithFormat:@"%lu", (unsigned long)[[route getRoutePoints] count] ]];
+        [pin setIndex: [[route getRoutePoints] count]];
+        [[route getRoutePoints] addObject:pin];
+        [self.mapView addAnnotation:pin];
     }
-    MapPin* pin = [[MapPin alloc] init];
-    CGPoint point = [sender locationInView:self.mapView];
-    CLLocationCoordinate2D locCoord = [self.mapView convertPoint:point toCoordinateFromView:self.mapView];
-    MKCoordinateRegion region = { { 0.0, 0.0 }, { 0.0, 0.0 } };
-    region.center.latitude = locCoord.latitude;
-    region.center.longitude = locCoord.longitude;
-    region.span.longitudeDelta = 0.01f;
-    region.span.latitudeDelta = 0.01f;
-    pin.coordinate = region.center;
-    //ustaw "Title" jako indeks
-    [pin setTitle: [NSString stringWithFormat:@"%lu", (unsigned long)[[route getRoutePoints] count] ]];
-    [pin setIndex: [[route getRoutePoints] count]];
-    [[route getRoutePoints] addObject:pin];
-    [self.mapView addAnnotation:pin];
 }
 
-- (IBAction)addEvent:(id)sender {
+- (IBAction)addRoute:(id)sender {
     if ([[routeNameField text] length] != 0) {
         [route setRouteName: [routeNameField text]];
     } else {

@@ -28,43 +28,47 @@ static sqlite3_stmt *statement = nil;
     (NSDocumentDirectory, NSUserDomainMask, YES);
     docsDir = dirPaths[0];
     databasePath = [[NSString alloc] initWithString:
-                    [docsDir stringByAppendingPathComponent: @"letsMeet.db"]];
+                    [docsDir stringByAppendingPathComponent: @"hikingEmergency.db"]];
     BOOL isSuccess = YES;
     NSFileManager *filemgr = [NSFileManager defaultManager];
     if ([filemgr fileExistsAtPath: databasePath ] == NO)
     {
-        //włączenie kluczy obcych, domyślnie są wyłączone w celu zapewnienia kompatybilności wstecz z poprzednimi wersjami sqlite
-        char *errMsg0;
-        const char *sql_pragma_stmt = "PRAGMA foreign_keys=ON";
-        if (sqlite3_exec(database, sql_pragma_stmt, NULL, NULL, &errMsg0)
-            != SQLITE_OK)
+        const char *dbpath = [databasePath UTF8String];
+        if (sqlite3_open(dbpath, &database) == SQLITE_OK)
         {
-            isSuccess = NO;
-            NSLog(@"Failed to execute pragma query, %s", errMsg0);
-        }
-        //utworzenie tabeli przechowującej lokalizację użytkownika
-        char *errMsg1;
-        const char *sql_stmt_usrloc =
-        "create table if not exists userLocationsTable (id integer primary key autoincrement, userLocationLatitude real, userLocationLongitude real, updateDate text";
-        if (sqlite3_exec(database, sql_stmt_usrloc, NULL, NULL, &errMsg1)
-            != SQLITE_OK)
-        {
-            isSuccess = NO;
-            NSLog(@"Failed to create locations table, %s", errMsg1);
-        }
-        //utworzenie tabeli przechowującej punkty tras
-        char *errMsg2;
-        const char *sql_stmt_routepoints =
-        "create table if not exists routePointsTable (routeName text primary key, index number, locationLatitude real, locationLongitude real)";
-        if (sqlite3_exec(database, sql_stmt_routepoints, NULL, NULL, &errMsg2)
-            != SQLITE_OK)
-        {
-            isSuccess = NO;
-            NSLog(@"Failed to create route points table, %s", errMsg2);
-        }
+            //włączenie kluczy obcych, domyślnie są wyłączone w celu zapewnienia kompatybilności wstecz z poprzednimi wersjami sqlite
+            char *errMsg0;
+            const char *sql_pragma_stmt = "PRAGMA foreign_keys=ON";
+            if (sqlite3_exec(database, sql_pragma_stmt, NULL, NULL, &errMsg0)
+                != SQLITE_OK)
+            {
+                isSuccess = NO;
+                NSLog(@"Failed to execute pragma query, %s", errMsg0);
+            }
+            //utworzenie tabeli przechowującej lokalizację użytkownika
+            char *errMsg1;
+            const char *sql_stmt_usrloc =
+            "create table if not exists userLocationsTable (id integer primary key autoincrement, userLocationLatitude real, userLocationLongitude real, updateDate text)";
+            if (sqlite3_exec(database, sql_stmt_usrloc, NULL, NULL, &errMsg1)
+                != SQLITE_OK)
+            {
+                isSuccess = NO;
+                NSLog(@"Failed to create locations table, %s", errMsg1);
+            }
+            //utworzenie tabeli przechowującej punkty tras
+            char *errMsg2;
+            const char *sql_stmt_routepoints =
+            "create table if not exists routePointsTable (routeName text primary key, route_index number, locationLatitude real, locationLongitude real)";
+            if (sqlite3_exec(database, sql_stmt_routepoints, NULL, NULL, &errMsg2)
+                != SQLITE_OK)
+            {
+                isSuccess = NO;
+                NSLog(@"Failed to create route points table, %s", errMsg2);
+            }
 
-        sqlite3_close(database);
-        return  isSuccess;
+            sqlite3_close(database);
+            return  isSuccess;
+        }
     }
     else {
         isSuccess = NO;
@@ -208,7 +212,7 @@ static sqlite3_stmt *statement = nil;
     const char *dbpath = [databasePath UTF8String];
     if (sqlite3_open(dbpath, &database) == SQLITE_OK)
     {
-        NSString *querySQL = [NSString stringWithFormat: @"select locationLatitude, locationLongitude, index from routePointsTable order by index asc"];
+        NSString *querySQL = [NSString stringWithFormat: @"select locationLatitude, locationLongitude, route_index from routePointsTable order by route_index asc"];
         const char *query_stmt = [querySQL UTF8String];
         NSMutableArray *points = [[NSMutableArray alloc] init];
         if (sqlite3_prepare_v2(database,query_stmt, -1, &statement, NULL) == SQLITE_OK)

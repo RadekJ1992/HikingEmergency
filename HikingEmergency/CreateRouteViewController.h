@@ -23,6 +23,6 @@
 //obiekt reprezentujący trasę
 @property (strong, nonatomic) Route* route;
 //po wciśnięciu przycisku "Done"
-- (IBAction)addEvent:(id)sender;
+- (IBAction)addRoute:(id)sender;
 
 @end

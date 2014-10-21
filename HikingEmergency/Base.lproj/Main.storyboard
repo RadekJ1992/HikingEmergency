@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="k7h-gM-iyk">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="k7h-gM-iyk">
     <dependencies>
         <development version="5100" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
     </dependencies>
     <scenes>
         <!--mainMenu-->
         <scene sceneID="ORH-k0-L5a">
             <objects>
-                <viewController title="mainMenu" id="k7h-gM-iyk" customClass="eventsListViewController" sceneMemberID="viewController">
+                <viewController title="mainMenu" id="k7h-gM-iyk" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="flE-OX-Po7"/>
                         <viewControllerLayoutGuide type="bottom" id="5yT-Ou-uyg"/>
@@ -93,9 +93,6 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <connections>
-                        <outlet property="eventTable" destination="8j3-3u-46x" id="8Pv-df-aEa"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jvx-85-n2F" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -177,7 +174,7 @@
                                 <state key="normal" title="Done"/>
                                 <connections>
                                     <action selector="AddObject:" destination="Rvw-kx-gho" eventType="touchUpInside" id="Dmn-zv-0P7"/>
-                                    <action selector="addEvent:" destination="Rvw-kx-gho" eventType="touchUpInside" id="Zrh-HP-yjj"/>
+                                    <action selector="addRoute:" destination="Rvw-kx-gho" eventType="touchUpInside" id="dd9-ad-RIh"/>
                                     <segue destination="UvH-cA-Llq" kind="modal" identifier="" id="U9w-MY-OgE"/>
                                 </connections>
                             </button>
@@ -239,6 +236,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="U9w-MY-OgE"/>
+        <segue reference="ipX-V4-ZBo"/>
     </inferredMetricsTieBreakers>
 </document>
