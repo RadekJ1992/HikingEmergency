@@ -1,4 +1,4 @@
-//
+    //
 //  CreateRouteViewController.m
 //  HikingEmergency
 //
@@ -30,6 +30,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [routeNameField setDelegate:self];
     //obsługa wciśnięcia i przytrzymania palca na mapie - dodanie pozycji trasy
     UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGesture:)];
     [self.mapView addGestureRecognizer:longPressGesture];
@@ -47,6 +48,11 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+}
+
+-(BOOL) textFieldShouldReturn:(UITextField *)textField{
+    [textField resignFirstResponder];
+    return YES;
 }
 
 -(void)handleLongPressGesture:(UIGestureRecognizer*)sender {
@@ -81,6 +87,8 @@
         NSString *dateString = [dateFormat stringFromDate:date];
         [route setRouteName: dateString];
     }
-    [[DBManager getSharedInstance] createNewRoute:route];
+    if ([[route getRoutePoints] count] != 0) {
+        [[DBManager getSharedInstance] createNewRoute:route];
+    }
 }
 @end

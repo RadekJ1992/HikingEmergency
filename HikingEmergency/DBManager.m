@@ -58,7 +58,7 @@ static sqlite3_stmt *statement = nil;
             //utworzenie tabeli przechowującej punkty tras
             char *errMsg2;
             const char *sql_stmt_routepoints =
-            "create table if not exists routePointsTable (routeName text primary key, route_index number, locationLatitude real, locationLongitude real)";
+            "create table if not exists routePointsTable (routeName text, routeIndex number, locationLatitude real, locationLongitude real, primary key (routeName, routeIndex))";
             if (sqlite3_exec(database, sql_stmt_routepoints, NULL, NULL, &errMsg2)
                 != SQLITE_OK)
             {
@@ -72,7 +72,7 @@ static sqlite3_stmt *statement = nil;
     }
     else {
         isSuccess = NO;
-        NSLog(@"Failed to open/create database");
+        NSLog(@"Database Exists");
     }
     return isSuccess;
 }
@@ -88,7 +88,7 @@ static sqlite3_stmt *statement = nil;
     const char *dbpath = [databasePath UTF8String];
     if (sqlite3_open(dbpath, &database) == SQLITE_OK)
     {
-        NSString *insertSQL = [NSString stringWithFormat:@"insert into userLocationsTable values (%f,%f,\"%@\"", coordinates.latitude, coordinates.longitude, dateString];
+        NSString *insertSQL = [NSString stringWithFormat:@"insert into userLocationsTable (userLocationLatitude, userLocationLongitude, updateDate) values (%f,%f,'%@')", coordinates.latitude, coordinates.longitude, dateString];
         const char *insert_stmt = [insertSQL UTF8String];
         sqlite3_prepare_v2(database, insert_stmt,-1, &statement, NULL);
         int i = sqlite3_step(statement);
@@ -113,7 +113,7 @@ static sqlite3_stmt *statement = nil;
     const char *dbpath = [databasePath UTF8String];
     if (sqlite3_open(dbpath, &database) == SQLITE_OK)
     {
-        NSString *querySQL = [NSString stringWithFormat: @"select userLocationLatitude, userLocationLongitude, updateDate from userLocationsTable order by id desc"];
+        NSString *querySQL = [NSString stringWithFormat: @"select userLocationLatitude, userLocationLongitude, updateDate from userLocationsTable where rowid < 30 order by id desc"];
         const char *query_stmt = [querySQL UTF8String];
         if (sqlite3_prepare_v2(database,query_stmt, -1, &statement, NULL) == SQLITE_OK)
         {
@@ -177,7 +177,7 @@ static sqlite3_stmt *statement = nil;
     for (id object in [route getRoutePoints]) {
         if ([object isMemberOfClass:[MapPin class]]) {
             MapPin *pin = object;
-            if (![self addRoutePointForRouteName:[route getRouteName] withIndex:index andCoordinates:[pin coordinate]]) return NO;
+            [self addRoutePointForRouteName:[route getRouteName] withIndex:index andCoordinates:[pin coordinate]];
             index++;
         }
     }
@@ -194,16 +194,22 @@ static sqlite3_stmt *statement = nil;
         int i = sqlite3_step(statement);
         if (i== SQLITE_DONE)
         {
+            NSLog(@"ok");
+            NSLog([NSString stringWithCString:insert_stmt encoding:NSASCIIStringEncoding]);
             sqlite3_reset(statement);
             sqlite3_close(database);
             return YES;
         }
         else {
+            NSLog(@"no ok");
+            NSLog([NSString stringWithCString:insert_stmt encoding:NSASCIIStringEncoding]);
             sqlite3_reset(statement);
             sqlite3_close(database);
             return NO;
         }
     }
+    sqlite3_reset(statement);
+    sqlite3_close(database);
     return NO;
 }
 
@@ -212,7 +218,7 @@ static sqlite3_stmt *statement = nil;
     const char *dbpath = [databasePath UTF8String];
     if (sqlite3_open(dbpath, &database) == SQLITE_OK)
     {
-        NSString *querySQL = [NSString stringWithFormat: @"select locationLatitude, locationLongitude, route_index from routePointsTable order by route_index asc"];
+        NSString *querySQL = [NSString stringWithFormat: @"select locationLatitude, locationLongitude, routeIndex from routePointsTable order by routeIndex asc"];
         const char *query_stmt = [querySQL UTF8String];
         NSMutableArray *points = [[NSMutableArray alloc] init];
         if (sqlite3_prepare_v2(database,query_stmt, -1, &statement, NULL) == SQLITE_OK)
@@ -224,7 +230,7 @@ static sqlite3_stmt *statement = nil;
                 CLLocationCoordinate2D coord = CLLocationCoordinate2DMake([lat doubleValue], [lng doubleValue]);
                 MapPin* pin = [[MapPin alloc] init];
                 pin.coordinate = coord;
-                [points addObject:name];
+                [points addObject:pin];
             }
             sqlite3_reset(statement);
             sqlite3_close(database);

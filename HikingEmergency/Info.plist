@@ -6,6 +6,8 @@
 	<string>en</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Hiking Emergency would like to use your location.</string>
 	<key>CFBundleIdentifier</key>
 	<string>RJ.$(PRODUCT_NAME:rfc1034identifier)</string>
 	<key>CFBundleInfoDictionaryVersion</key>

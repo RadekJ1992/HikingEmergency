@@ -53,6 +53,8 @@
 		<dict>
 			<key>Type</key>
 			<string>PSTextFieldSpecifier</string>
+			<key>DefaultValue</key>
+			<string>100</string>
 			<key>KeyboardType</key>
 			<string>NumbersAndPunctuation</string>
 			<key>Key</key>

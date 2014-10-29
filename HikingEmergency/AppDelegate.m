@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "DBManager.h"
 
 @interface AppDelegate ()
 
@@ -14,10 +15,74 @@
 
 @implementation AppDelegate
 
+@synthesize locationManager;
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    //pobranie ustawień z SettingsBundle
+    
+    NSUserDefaults * standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    NSString * ip = [standardUserDefaults objectForKey:@"serverIP"];
+    NSString * port = [standardUserDefaults objectForKey:@"serverPort"];
+    NSString *phoneNumber = (NSString*)[[NSUserDefaults standardUserDefaults] valueForKey:@"emergencyPhoneNumber"];
+    BOOL isShockCheck = [[NSUserDefaults standardUserDefaults] valueForKey:@"isShockCheck"];
+    NSNumberFormatter * formatter = [[NSNumberFormatter alloc] init];
+    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    NSNumber * radius = [formatter numberFromString: [standardUserDefaults objectForKey:@"radius"]];
+    if (!ip || !port || !phoneNumber || !radius) {
+        [self registerDefaultsFromSettingsBundle];
+    }
+    
+    //uruchomienie locationManagera w celu pobierania lokalizacji GPS
+    
+    if (nil == locationManager)
+        locationManager = [[CLLocationManager alloc] init];
+    [locationManager requestAlwaysAuthorization];
+    [locationManager requestWhenInUseAuthorization];
+    locationManager.distanceFilter = 10;
+    locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    locationManager.delegate = self;
+    [locationManager startMonitoringSignificantLocationChanges];
+    [locationManager startUpdatingLocation];
     return YES;
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application
+{
+    //wyłączenie usług lokalizacji
+    [locationManager stopMonitoringSignificantLocationChanges];
+    [locationManager stopUpdatingLocation];
+}
+
+- (void)registerDefaultsFromSettingsBundle {
+    NSString *settingsBundle = [[NSBundle mainBundle] pathForResource:@"Settings" ofType:@"bundle"];
+    if(!settingsBundle) {
+        NSLog(@"Could not find Settings.bundle");
+        return;
+    }
+    
+    NSDictionary *settings = [NSDictionary dictionaryWithContentsOfFile:[settingsBundle stringByAppendingPathComponent:@"Root.plist"]];
+    NSArray *preferences = [settings objectForKey:@"PreferenceSpecifiers"];
+    
+    NSMutableDictionary *defaultsToRegister = [[NSMutableDictionary alloc] initWithCapacity:[preferences count]];
+    for(NSDictionary *prefSpecification in preferences) {
+        NSString *key = [prefSpecification objectForKey:@"Key"];
+        if(key) {
+            [defaultsToRegister setObject:[prefSpecification objectForKey:@"DefaultValue"] forKey:key];
+            NSLog(@"writing as default %@ to the key %@",[prefSpecification objectForKey:@"DefaultValue"],key);
+        }
+    }
+    
+    [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsToRegister];
+    
+}
+
+
+
+//wywoływane po zaktualizowaniu lokalizacji - wprowadzenie jej do bazy danych i wysłanie informacji na serwer
+-(void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+    NSLog(@"locationUpdate %f, %f" ,[locations[0] coordinate].latitude, [locations[0] coordinate].longitude);
+    [[DBManager getSharedInstance] insertUserLocation: [locations[0] coordinate]];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -26,8 +91,14 @@
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    if ([CLLocationManager significantLocationChangeMonitoringAvailable]) {
+        // Stop normal location updates and start significant location change updates for battery efficiency.
+        [locationManager stopUpdatingLocation];
+        [locationManager startMonitoringSignificantLocationChanges];
+    }
+    else {
+        NSLog(@"Significant location change monitoring is not available.");
+    }
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
@@ -35,11 +106,25 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    
+#ifdef __IPHONE_8_0
+    if(IS_OS_8_OR_LATER) {
+        // Use one or the other, not both. Depending on what you put in info.plist
+        [self.locationManager requestWhenInUseAuthorization];
+        [self.locationManager requestAlwaysAuthorization];
+    }
+#endif
+    
+    if ([CLLocationManager significantLocationChangeMonitoringAvailable]) {
+        // Stop significant location updates and start normal location updates again since the app is in the forefront.
+        [locationManager stopMonitoringSignificantLocationChanges];
+        [locationManager startUpdatingLocation];
+    }
+    else {
+        NSLog(@"Significant location change monitoring is not available.");
+    }
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application {
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-}
+
 
 @end

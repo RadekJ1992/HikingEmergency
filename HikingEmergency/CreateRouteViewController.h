@@ -14,8 +14,9 @@
 /**
  ViewController obsługujący stworzenie trasy
  */
-@interface CreateRouteViewController : UIViewController <UISearchBarDelegate>
+@interface CreateRouteViewController : UIViewController <UISearchBarDelegate, UITextFieldDelegate>
 
+@property (nonatomic, weak) NSString *routeName;
 //okienko z mapą
 @property (nonatomic, retain) IBOutlet MKMapView *mapView;
 //TextField służący do wprowadzenia nazwy trasy

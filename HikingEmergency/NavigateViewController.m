@@ -15,6 +15,8 @@
 @implementation NavigateViewController
 @synthesize route;
 @synthesize mapView;
+@synthesize routeLine;
+@synthesize routeLineView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -34,10 +36,34 @@
     [mapView setRegion:adjustedRegion animated:YES];
     mapView.showsUserLocation = YES;
     
-    //wyświetlenie pinezki w miejcu wydarzenia
     for (MapPin *pin in [route getRoutePoints]) {
         [mapView addAnnotation:pin];
     }
+    int routeCount = (int)[[route getRoutePoints] count];
+    CLLocationCoordinate2D *coordinateArray = malloc(sizeof(CLLocationCoordinate2D) * routeCount);
+    for (int i = 0; i < routeCount; i++) {
+        CLLocationCoordinate2D loc = [((MapPin*)[[route getRoutePoints] objectAtIndex:i]) coordinate];
+        coordinateArray[i] = loc;
+    }
+    
+    self.routeLine = [MKPolyline polylineWithCoordinates:coordinateArray count:[[route getRoutePoints] count]];
+    [self.mapView setVisibleMapRect:[self.routeLine boundingMapRect]];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [mapView addOverlay:self.routeLine];
+    });
+   // [self.mapView addOverlay:self.routeLine];
+    free(coordinateArray);
+}
+
+- (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id)overlay {
+    
+    if ([overlay isKindOfClass:[MKPolyline class]]) {
+        MKPolylineView* aView = [[MKPolylineView alloc]initWithPolyline:(MKPolyline*)overlay] ;
+        aView.strokeColor = [[UIColor blueColor] colorWithAlphaComponent:0.5];
+        aView.lineWidth = 10;
+        return aView;
+    }
+    return nil;
 }
 
 

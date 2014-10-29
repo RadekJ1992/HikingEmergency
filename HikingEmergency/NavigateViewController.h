@@ -15,6 +15,8 @@
 
 @property (nonatomic, retain) IBOutlet MKMapView *mapView;
 @property (strong, nonatomic) Route* route;
+@property (nonatomic, retain) MKPolyline *routeLine;
+@property (nonatomic, retain) MKPolylineView *routeLineView;
 
 
 @end
