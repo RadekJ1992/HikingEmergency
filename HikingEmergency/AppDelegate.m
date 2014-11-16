@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "DBManager.h"
+#import "LocationsController.h"
 
 @interface AppDelegate ()
 
@@ -82,7 +82,7 @@
 //wywoływane po zaktualizowaniu lokalizacji - wprowadzenie jej do bazy danych i wysłanie informacji na serwer
 -(void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     NSLog(@"locationUpdate %f, %f" ,[locations[0] coordinate].latitude, [locations[0] coordinate].longitude);
-    [[DBManager getSharedInstance] insertUserLocation: [locations[0] coordinate]];
+    [[LocationsController getSharedInstance] addLocation: [locations[0] coordinate]];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

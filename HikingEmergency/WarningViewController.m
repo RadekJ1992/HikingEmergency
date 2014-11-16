@@ -7,16 +7,37 @@
 //
 
 #import "WarningViewController.h"
+#import "LocationsController.h"
 
-@interface WarningViewController ()
+@interface WarningViewController () {
+    AVAudioPlayer *audioPlayer;
+}
 
 @end
 
 @implementation WarningViewController
 
+@synthesize timeLeft;
+@synthesize timer;
+
+int timeValue = 60;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    NSString *path = [NSString stringWithFormat:@"%@/alarm.mp3", [[NSBundle mainBundle] resourcePath]];
+    NSURL *fileURL = [NSURL fileURLWithPath:path];
+    
+    audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:nil];
+    NSTimer *countdownTimer = [NSTimer scheduledTimerWithTimeInterval:1
+                                                               target:self
+                                                             selector:@selector(decreaseTimeLeft:)
+                                                             userInfo:nil
+                                                              repeats:YES];
+    timer = countdownTimer;
+    NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
+    [timeLeft setText:[NSString stringWithFormat:@"%d", timeValue]];
+    [runLoop addTimer:countdownTimer forMode:NSDefaultRunLoopMode];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -24,14 +45,18 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)decreaseTimeLeft:(NSTimer *)timer
+{
+    timeValue -= 1;
+    [audioPlayer stop];
+    [audioPlayer play];
+    if (timeValue == 0 ) {
+        [[LocationsController getSharedInstance] sendEmergencyWithLastKnownLocation];
+        [[self timer] invalidate];
+        [self setTimer: nil];
+    } else {
+        [timeLeft setText:[NSString stringWithFormat:@"%d", timeValue]];
+    }
 }
-*/
 
 @end

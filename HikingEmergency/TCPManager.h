@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "DBManager.h"
+#import <MapKit/MapKit.h>
 /**
  Singleton obsługujący połączenie TCP z serwerem
  */
@@ -25,6 +25,11 @@
 - (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)streamEvent;
 
 //wysłanie powitania na serwer
--(void) sendHello;
+- (void)sendHiWithLocation:(CLLocationCoordinate2D) location;
 
+//wysłanie lokalizacji na serwer
+- (void)sendLocation:(CLLocationCoordinate2D) location;
+
+//wysłanie alarmu na serwer
+- (void)sendEmergencyWithLocation:(CLLocationCoordinate2D) location;
 @end

@@ -16,6 +16,7 @@ static NSOutputStream *outputStream;
 static bool isConnected;
 static NSMutableArray *receivedMessages;
 static NSString *phoneNumber;
+static NSString *emergencyPhoneNumber;
 
 +(TCPManager*)getSharedInstance{
     if (!sharedInstance) {
@@ -33,6 +34,8 @@ static NSString *phoneNumber;
     NSUserDefaults * standardUserDefaults = [NSUserDefaults standardUserDefaults];
     NSString * ip = [standardUserDefaults objectForKey:@"serverIP"];
     NSString * port = [standardUserDefaults objectForKey:@"serverPort"];
+    phoneNumber = [standardUserDefaults objectForKey:@"userPhoneNumber"];
+    emergencyPhoneNumber = [standardUserDefaults objectForKey:@"emergencyPhoneNumber"];
     
     //utworzenie Socketa
     CFStreamCreatePairWithSocketToHost(NULL, (__bridge CFStringRef) ip, [port intValue], &readStream, &writeStream);
@@ -50,8 +53,6 @@ static NSString *phoneNumber;
     
     [inputStream open];
     [outputStream open];
-    
-    [sharedInstance sendHello];
     
     isConnected = true;
     
@@ -80,9 +81,7 @@ static NSString *phoneNumber;
                     if (len > 0) {
                         
                         NSString *output = [[NSString alloc] initWithBytes:buffer length:len encoding:NSASCIIStringEncoding];
-                        
-                        //wygram konkurs na najbardziej nieczytelny kod!
-                        
+                                               
                         if (nil != output) {
                             NSLog(@"%@", output);
                             
@@ -117,10 +116,19 @@ static NSString *phoneNumber;
 - (void)sendPacketWithMessage: (NSString*) msg {
 	NSData *data = [[NSData alloc] initWithData:[msg dataUsingEncoding:NSASCIIStringEncoding]];
 	[outputStream write:[data bytes] maxLength:[data length]];
+    NSLog([NSString stringWithFormat:@"%@: %@", @"Sending message: ", msg]);
 }
 
--(void) sendHello {
-    [sharedInstance sendPacketWithMessage: [NSString stringWithFormat: @"HELLO"]];
+- (void)sendHiWithLocation:(CLLocationCoordinate2D) location {
+    [[TCPManager getSharedInstance] sendPacketWithMessage:[NSString stringWithFormat:@"HI;%@;%@;%f;%f\n", phoneNumber, emergencyPhoneNumber, location.latitude, location.longitude]];
+}
+
+- (void)sendLocation:(CLLocationCoordinate2D) location {
+    [[TCPManager getSharedInstance] sendPacketWithMessage:[NSString stringWithFormat:@"LOC;%@;%f;%f\n", phoneNumber, location.latitude, location.longitude]];
+}
+
+- (void)sendEmergencyWithLocation:(CLLocationCoordinate2D) location {
+    [[TCPManager getSharedInstance] sendPacketWithMessage:[NSString stringWithFormat:@"EMG;%@;%f;%f\n", phoneNumber, location.latitude, location.longitude]];
 }
 
 @end

@@ -133,7 +133,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <state key="normal" title="I'm OK"/>
                             </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="1:00" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="rxn-BU-44c">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="60" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="rxn-BU-44c">
                                 <rect key="frame" x="0.0" y="125" width="320" height="77"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="56"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -141,6 +141,9 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <connections>
+                        <outlet property="timeLeft" destination="rxn-BU-44c" id="HgL-Vd-e6q"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XcK-63-u3t" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -241,6 +244,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="ipX-V4-ZBo"/>
+        <segue reference="YiC-tS-Y5i"/>
     </inferredMetricsTieBreakers>
 </document>
