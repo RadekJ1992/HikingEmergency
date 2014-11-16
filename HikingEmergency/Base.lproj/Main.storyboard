@@ -132,6 +132,9 @@
                                 <rect key="frame" x="0.0" y="402" width="320" height="53"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <state key="normal" title="I'm OK"/>
+                                <connections>
+                                    <segue destination="QvS-Te-Mqb" kind="modal" identifier="imOk" id="lgS-9o-6bK"/>
+                                </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="60" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="rxn-BU-44c">
                                 <rect key="frame" x="0.0" y="125" width="320" height="77"/>
@@ -141,6 +144,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="hv9-8b-dOp"/>
                     <connections>
                         <outlet property="timeLeft" destination="rxn-BU-44c" id="HgL-Vd-e6q"/>
                     </connections>
@@ -231,6 +235,7 @@
                     </view>
                     <connections>
                         <outlet property="mapView" destination="JoH-zO-rbR" id="qpk-F0-1Gk"/>
+                        <segue destination="Dkp-Jo-lux" kind="modal" identifier="warning" id="zre-rj-1ta"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WQj-6Z-ONe" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -245,5 +250,6 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="YiC-tS-Y5i"/>
+        <segue reference="lgS-9o-6bK"/>
     </inferredMetricsTieBreakers>
 </document>

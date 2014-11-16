@@ -8,10 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
+#import "Route.h"
+#import "NavigateViewController.h"
 
 @interface WarningViewController : UIViewController
 
 @property (weak) NSTimer *timer;
 @property (weak, nonatomic) IBOutlet UITextField *timeLeft;
+/**
+ wybrana trasa
+ */
+@property (strong, nonatomic) Route* route;
 
 @end

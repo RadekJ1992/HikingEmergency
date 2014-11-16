@@ -7,9 +7,11 @@
 //
 
 #import "NavigateViewController.h"
+#import "WarningViewController.h"
 #import "DBManager.h"
 
 @interface NavigateViewController ()
+bool isCurrentlyStationary;
 @end
 
 @implementation NavigateViewController
@@ -17,6 +19,20 @@
 @synthesize mapView;
 @synthesize routeLine;
 @synthesize routeLineView;
+@synthesize motionActivityManager;
+@synthesize timer;
+
+/**
+ obsługa przekazywania obiektów między viewControllerami
+ */
+-(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"warning"]) {
+        if (route) {
+            WarningViewController *wVC = [segue destinationViewController];
+            wVC.route = route;
+        }
+    }
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -28,13 +44,37 @@
 
 - (void)viewDidLoad
 {
+    isCurrentlyStationary = false;
     [super viewDidLoad];
-    
+    self.motionActivityManager=[[CMMotionActivityManager alloc]init];
     //wyświetlenie mapy
     MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance([[[route getRoutePoints] firstObject] coordinate], 1000, 1000);
     MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion];
     [mapView setRegion:adjustedRegion animated:YES];
     mapView.showsUserLocation = YES;
+    
+    [self.motionActivityManager startActivityUpdatesToQueue:[NSOperationQueue mainQueue] withHandler:^(CMMotionActivity *activity)
+     {
+         if (activity.stationary == YES) {
+             if (!isCurrentlyStationary) {
+                 isCurrentlyStationary = YES;
+                 NSTimer *countdownTimer = [NSTimer scheduledTimerWithTimeInterval: 600 //10 minut bez ruchu
+                                                                            target:self
+                                                                          selector:@selector(triggerAlarm:)
+                                                                          userInfo:nil
+                                                                           repeats:NO];
+                 timer = countdownTimer;
+                 NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
+                 NSLog(@"Timer Started! No motion detected!");
+                 [runLoop addTimer:countdownTimer forMode:NSDefaultRunLoopMode];
+             }
+         } else {
+             isCurrentlyStationary = NO;
+             NSLog(@"Timer Stopped! Motion detected");
+             [timer invalidate];
+             timer = nil;
+         }
+     }];
     
     for (MapPin *pin in [route getRoutePoints]) {
         [mapView addAnnotation:pin];
@@ -51,7 +91,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [mapView addOverlay:self.routeLine];
     });
-   // [self.mapView addOverlay:self.routeLine];
     free(coordinateArray);
 }
 
@@ -66,6 +105,11 @@
     return nil;
 }
 
+- (void) triggerAlarm:(NSTimer *)timer {
+    [[self timer] invalidate];
+    self.timer = nil;
+    [self performSegueWithIdentifier:@"warning" sender:self];
+}
 
 - (void)didReceiveMemoryWarning
 {

@@ -19,8 +19,16 @@
 
 @synthesize timeLeft;
 @synthesize timer;
+@synthesize route;
 
 int timeValue = 60;
+
+if ([segue.identifier isEqualToString:@"imOk"]) {
+    if (route) {
+        NavigateViewController *nVC = [segue destinationViewController];
+        nVC.route = route;
+    }
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];

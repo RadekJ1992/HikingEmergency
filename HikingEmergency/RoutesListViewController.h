@@ -9,19 +9,19 @@
 #import <UIKit/UIKit.h>
 #import "DBManager.h"
 /**
- ViewController pokazujący listę dostępnych wydarzeń. Implementuje protokoły UITableViewDelegate i UITableViewDataSource w celu obsługi tabeli wydarzeń
+ ViewController pokazujący listę dostępnych tras. Implementuje protokoły UITableViewDelegate i UITableViewDataSource w celu obsługi tabeli tras
  */
 @interface RoutesListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 /**
- tabela z wydarzeniami
+ tabela z trasami
  */
 @property (weak, nonatomic) IBOutlet UITableView *routeTable;
 /**
- tablica z nazwami wydarzeń pobrana z bazy danych
+ tablica z nazwami tras pobrana z bazy danych
  */
 @property (strong, nonatomic) NSMutableArray *routeNames;
 /**
- wybrane wydarzenie
+ wybrana trasa
  */
 @property (strong, nonatomic) Route* route;
 

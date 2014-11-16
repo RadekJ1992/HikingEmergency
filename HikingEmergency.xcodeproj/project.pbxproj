@@ -30,6 +30,7 @@
 		458F316219E932370003B89D /* CreateRouteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 458F316119E932370003B89D /* CreateRouteViewController.m */; };
 		458F316519E932480003B89D /* NavigateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 458F316419E932480003B89D /* NavigateViewController.m */; };
 		458F316819E9357B0003B89D /* WarningViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 458F316719E9357B0003B89D /* WarningViewController.m */; };
+		45B885E71A19181B00FB2728 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45B885E61A19181B00FB2728 /* CoreMotion.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +82,7 @@
 		458F316419E932480003B89D /* NavigateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigateViewController.m; sourceTree = "<group>"; };
 		458F316619E9357B0003B89D /* WarningViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WarningViewController.h; sourceTree = "<group>"; };
 		458F316719E9357B0003B89D /* WarningViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WarningViewController.m; sourceTree = "<group>"; };
+		45B885E61A19181B00FB2728 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				45B885E71A19181B00FB2728 /* CoreMotion.framework in Frameworks */,
 				458D93211A19097D00A8464A /* AVFoundation.framework in Frameworks */,
 				45736DCD19D9CF9F00A485D6 /* MapKit.framework in Frameworks */,
 				45736DCB19D9CF9000A485D6 /* libsqlite3.dylib in Frameworks */,
@@ -109,6 +112,7 @@
 		45736D9219D9C9D900A485D6 = {
 			isa = PBXGroup;
 			children = (
+				45B885E61A19181B00FB2728 /* CoreMotion.framework */,
 				458D93201A19097D00A8464A /* AVFoundation.framework */,
 				45736DCC19D9CF9F00A485D6 /* MapKit.framework */,
 				45736DCA19D9CF9000A485D6 /* libsqlite3.dylib */,

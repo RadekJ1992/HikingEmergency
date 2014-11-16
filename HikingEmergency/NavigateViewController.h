@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
+#import <CoreMotion/CoreMotion.h>
 #import "Route.h"
 #import "MapPin.h"
 
@@ -17,6 +18,8 @@
 @property (strong, nonatomic) Route* route;
 @property (nonatomic, retain) MKPolyline *routeLine;
 @property (nonatomic, retain) MKPolylineView *routeLineView;
+@property (nonatomic,strong) CMMotionActivityManager *motionActivityManager;
+@property (weak) NSTimer *timer;
 
 
 @end
