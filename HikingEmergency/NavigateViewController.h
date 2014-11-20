@@ -16,10 +16,11 @@
 
 @property (nonatomic, retain) IBOutlet MKMapView *mapView;
 @property (strong, nonatomic) Route* route;
-@property (nonatomic, retain) MKPolyline *routeLine;
-@property (nonatomic, retain) MKPolylineView *routeLineView;
+@property (nonatomic, strong) MKPolylineView *lineView;
+@property (nonatomic, strong) MKPolyline *polyline;
 @property (nonatomic,strong) CMMotionActivityManager *motionActivityManager;
 @property (weak) NSTimer *timer;
+@property (nonatomic) BOOL isCurrentlyStationary;
 
 
 @end

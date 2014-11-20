@@ -32,19 +32,13 @@ static LocationsController *sharedInstance = nil;
 
 - (void)addLocation:(CLLocationCoordinate2D) location {
     lastLocation = location;
-    /*[[DBManager getSharedInstance] insertUserLocation:location];
-    if (isFirstLocation) {
-        [[TCPManager getSharedInstance] sendHiWithLocation:location];
-        isFirstLocation = NO;
-    } else {
-        [[TCPManager getSharedInstance] sendLocation:location];
-    }*/
 }
 
 +(void) sendLocation {
     [[DBManager getSharedInstance] insertUserLocation:[sharedInstance lastLocation]];
     if ([sharedInstance isFirstLocation]) {
         [[TCPManager getSharedInstance] sendHiWithLocation:[sharedInstance lastLocation]];
+        [sharedInstance setIsFirstLocation:NO];
     } else {
         [[TCPManager getSharedInstance] sendLocation:[sharedInstance lastLocation]];
     }

@@ -22,11 +22,15 @@
 @synthesize route;
 
 int timeValue = 60;
-
-if ([segue.identifier isEqualToString:@"imOk"]) {
-    if (route) {
-        NavigateViewController *nVC = [segue destinationViewController];
-        nVC.route = route;
+/**
+ obsługa przekazywania obiektów między viewControllerami
+ */
+-(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"imOk"]) {
+        if (route) {
+            NavigateViewController *nVC = [segue destinationViewController];
+            nVC.route = route;
+        }
     }
 }
 

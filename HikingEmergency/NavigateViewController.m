@@ -11,14 +11,14 @@
 #import "DBManager.h"
 
 @interface NavigateViewController ()
-bool isCurrentlyStationary;
 @end
 
 @implementation NavigateViewController
+@synthesize isCurrentlyStationary;
 @synthesize route;
 @synthesize mapView;
-@synthesize routeLine;
-@synthesize routeLineView;
+@synthesize polyline;
+@synthesize lineView;
 @synthesize motionActivityManager;
 @synthesize timer;
 
@@ -45,6 +45,7 @@ bool isCurrentlyStationary;
 - (void)viewDidLoad
 {
     isCurrentlyStationary = false;
+    [[self mapView] setDelegate:self];
     [super viewDidLoad];
     self.motionActivityManager=[[CMMotionActivityManager alloc]init];
     //wyświetlenie mapy
@@ -76,33 +77,38 @@ bool isCurrentlyStationary;
          }
      }];
     
+    [self drawLines:self];
+}
+
+- (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id<MKOverlay>)overlay {
+    
+    return self.lineView;
+}
+
+- (void)drawLineSubroutine {
+    
+    [self.mapView removeOverlay:self.polyline];
+
+    //draw route
     for (MapPin *pin in [route getRoutePoints]) {
         [mapView addAnnotation:pin];
     }
-    int routeCount = (int)[[route getRoutePoints] count];
-    CLLocationCoordinate2D *coordinateArray = malloc(sizeof(CLLocationCoordinate2D) * routeCount);
-    for (int i = 0; i < routeCount; i++) {
+    
+    CLLocationCoordinate2D coordinateArray[[[route getRoutePoints] count]];
+    
+    for (int i = 0; i < [[route getRoutePoints] count]; i++) {
         CLLocationCoordinate2D loc = [((MapPin*)[[route getRoutePoints] objectAtIndex:i]) coordinate];
         coordinateArray[i] = loc;
     }
     
-    self.routeLine = [MKPolyline polylineWithCoordinates:coordinateArray count:[[route getRoutePoints] count]];
-    [self.mapView setVisibleMapRect:[self.routeLine boundingMapRect]];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [mapView addOverlay:self.routeLine];
-    });
-    free(coordinateArray);
-}
-
-- (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id)overlay {
+    MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coordinateArray count:[[route getRoutePoints] count]];
+    [self.mapView addOverlay:polyline];
+    self.polyline = polyline;
     
-    if ([overlay isKindOfClass:[MKPolyline class]]) {
-        MKPolylineView* aView = [[MKPolylineView alloc]initWithPolyline:(MKPolyline*)overlay] ;
-        aView.strokeColor = [[UIColor blueColor] colorWithAlphaComponent:0.5];
-        aView.lineWidth = 10;
-        return aView;
-    }
-    return nil;
+    // create an MKPolylineView and add it to the map view
+    self.lineView = [[MKPolylineView alloc]initWithPolyline:self.polyline];
+    self.lineView.strokeColor = [UIColor redColor];
+    self.lineView.lineWidth = 5;
 }
 
 - (void) triggerAlarm:(NSTimer *)timer {
@@ -111,6 +117,15 @@ bool isCurrentlyStationary;
     [self performSegueWithIdentifier:@"warning" sender:self];
 }
 
+- (IBAction)drawLines:(id)sender {
+    
+    // HACK: for some reason this only updates the map view every other time
+    // and because life is too frigging short, let's just call it TWICE
+    
+    [self drawLineSubroutine];
+    [self drawLineSubroutine];
+    
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
