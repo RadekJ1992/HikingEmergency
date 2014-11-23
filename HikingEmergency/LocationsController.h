@@ -8,15 +8,19 @@
 
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
+#import "Route.h"
 
 /**
  Singleton obsługujący wysyłanie informacji o lokalizacji
  */
-@interface LocationsController : NSObject
+@interface LocationsController : NSObject <UIAlertViewDelegate>
 
 @property bool isFirstLocation;
 @property (atomic, assign) CLLocationCoordinate2D lastLocation;
 @property (weak) NSTimer* timer;
+@property (strong, nonatomic) Route* route;
+@property (weak, nonatomic) NSNumber* radius;
+
 
 +(LocationsController*)getSharedInstance;
 

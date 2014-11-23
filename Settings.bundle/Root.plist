@@ -54,16 +54,6 @@
 		</dict>
 		<dict>
 			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-			<key>Title</key>
-			<string>Wstrząsy</string>
-			<key>DefaultValue</key>
-			<true/>
-			<key>Key</key>
-			<string>isShockCheck</string>
-		</dict>
-		<dict>
-			<key>Type</key>
 			<string>PSTextFieldSpecifier</string>
 			<key>DefaultValue</key>
 			<string>100</string>

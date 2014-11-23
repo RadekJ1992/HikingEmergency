@@ -101,9 +101,9 @@
         coordinateArray[i] = loc;
     }
     
-    MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coordinateArray count:[[route getRoutePoints] count]];
-    [self.mapView addOverlay:polyline];
-    self.polyline = polyline;
+    MKPolyline *newpolyline = [MKPolyline polylineWithCoordinates:coordinateArray count:[[route getRoutePoints] count]];
+    [self.mapView addOverlay:newpolyline];
+    self.polyline = newpolyline;
     
     // create an MKPolylineView and add it to the map view
     self.lineView = [[MKPolylineView alloc]initWithPolyline:self.polyline];
