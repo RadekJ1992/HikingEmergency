@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "LocationsController.h"
 
 @interface ViewController ()
 
@@ -16,6 +17,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[LocationsController getSharedInstance] setCurrentViewController:self];
     // Do any additional setup after loading the view, typically from a nib.
 }
 

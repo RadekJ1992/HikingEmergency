@@ -8,6 +8,7 @@
 
 #import "CreateRouteViewController.h"
 #import "DBManager.h"
+#import "LocationsController.h"
 
 @interface CreateRouteViewController ()
 
@@ -36,6 +37,7 @@
     [self.mapView addGestureRecognizer:longPressGesture];
     //wyświetlenie domyślnej lokalizacji - centrum Warszawy
     MKCoordinateRegion region = { { 0.0, 0.0 }, { 0.0, 0.0 } };
+    [[LocationsController getSharedInstance] setCurrentViewController:self];
     region.center.latitude = 52.2296756;
     region.center.longitude = 21.0122287;
     region.span.longitudeDelta = 0.01f;

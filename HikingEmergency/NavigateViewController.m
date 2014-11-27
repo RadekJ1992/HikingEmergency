@@ -9,6 +9,7 @@
 #import "NavigateViewController.h"
 #import "WarningViewController.h"
 #import "DBManager.h"
+#import "LocationsController.h"
 
 @interface NavigateViewController ()
 @end
@@ -53,7 +54,7 @@
     MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion];
     [mapView setRegion:adjustedRegion animated:YES];
     mapView.showsUserLocation = YES;
-    
+    [[LocationsController getSharedInstance] setCurrentViewController:self];
     [self.motionActivityManager startActivityUpdatesToQueue:[NSOperationQueue mainQueue] withHandler:^(CMMotionActivity *activity)
      {
          if (activity.stationary == YES) {

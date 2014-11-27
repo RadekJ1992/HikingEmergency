@@ -8,25 +8,41 @@
 
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
+#import <MessageUI/MessageUI.h>
+#import "DBManager.h"
 #import "Route.h"
+#import "GCDAsyncSocket.h"
+#import "GCDAsyncUdpSocket.h"
+#import "AppDelegate.h"
 
 /**
  Singleton obsługujący wysyłanie informacji o lokalizacji
  */
-@interface LocationsController : NSObject <UIAlertViewDelegate>
+@interface LocationsController : NSObject <UIAlertViewDelegate, MFMessageComposeViewControllerDelegate>
 
 @property bool isFirstLocation;
+@property bool isConnected;
+@property bool isSMSEnabled;
 @property (atomic, assign) CLLocationCoordinate2D lastLocation;
 @property (weak) NSTimer* timer;
+@property (weak) NSTimer* smsTimer;
+@property (strong, nonatomic) GCDAsyncUdpSocket* udpSocket;
+@property (strong, nonatomic) GCDAsyncSocket* tcpSocket;
 @property (strong, nonatomic) Route* route;
 @property (weak, nonatomic) NSNumber* radius;
+@property (weak, nonatomic) NSString* serverIP;
+@property (weak, nonatomic) NSString* serverTCPPort;
+@property (weak, nonatomic) NSString* serverUDPPort;
+@property (weak, nonatomic) NSString* phoneNumber;
+@property (weak, nonatomic) NSString* emergencyPhoneNumber;
+@property (weak, nonatomic) UIAlertView* routeAlert;
+@property (weak, nonatomic) UIAlertView* smsAlert;
+@property (weak, nonatomic) UIViewController* currentViewController;
 
 
 +(LocationsController*)getSharedInstance;
 
 - (void)addLocation:(CLLocationCoordinate2D) location;
-
-- (void)sendEmergencyWithLocation:(CLLocationCoordinate2D) location;
 
 - (void)sendEmergencyWithLastKnownLocation;
 @end

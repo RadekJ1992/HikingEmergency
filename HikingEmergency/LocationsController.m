@@ -7,35 +7,70 @@
 //
 
 #import "LocationsController.h"
-#import "DBManager.h"
-#import "TCPManager.h"
-#import <MapKit/MapKit.h>
 
 @implementation LocationsController
 
 static LocationsController *sharedInstance = nil;
+static dispatch_queue_t socketQueue;
 
 @synthesize isFirstLocation;
+@synthesize isConnected;
+@synthesize isSMSEnabled;
 @synthesize lastLocation;
 @synthesize timer;
+@synthesize smsTimer;
 @synthesize route;
 @synthesize radius;
+@synthesize udpSocket;
+@synthesize tcpSocket;
+@synthesize serverIP;
+@synthesize serverTCPPort;
+@synthesize serverUDPPort;
+@synthesize phoneNumber;
+@synthesize emergencyPhoneNumber;
+@synthesize routeAlert;
+@synthesize smsAlert;
+@synthesize currentViewController;
 
 +(LocationsController*)getSharedInstance {
     if (!sharedInstance) {
         sharedInstance = [[super allocWithZone:NULL]init];
         [sharedInstance setIsFirstLocation:YES];
+        [sharedInstance setIsConnected:NO];
         //get safety radius from settings
         NSUserDefaults * standardUserDefaults = [NSUserDefaults standardUserDefaults];
         NSNumberFormatter * formatter = [[NSNumberFormatter alloc] init];
         [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
         [sharedInstance setRadius: [formatter numberFromString: [standardUserDefaults objectForKey:@"radius"]]];
+        [sharedInstance setServerIP:[standardUserDefaults objectForKey:@"serverIP"]];
+        [sharedInstance setServerTCPPort:[standardUserDefaults objectForKey:@"serverPort"]];
+        [sharedInstance setServerUDPPort:[standardUserDefaults objectForKey:@"serverUDPPort"]];
+        [sharedInstance setPhoneNumber: [standardUserDefaults objectForKey:@"userPhoneNumber"]];
+        [sharedInstance setEmergencyPhoneNumber:[standardUserDefaults objectForKey:@"emergencyPhoneNumber"]];
         NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:30.0
                                                           target:self
                                                         selector:@selector(sendLocation)
                                                         userInfo:sharedInstance
                                                          repeats:YES];
+        //user will be asked to send SMS with his location only once every 10 minutes (except for emergencies)
+        NSTimer *smsTimer = [NSTimer scheduledTimerWithTimeInterval:600.0
+                                                          target:self
+                                                        selector:@selector(resetSMSEnabled)
+                                                        userInfo:sharedInstance
+                                                         repeats:YES];
+        socketQueue = dispatch_queue_create("socketQueue", NULL);
+        [sharedInstance setTcpSocket:[[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:socketQueue]];
         [sharedInstance setTimer: timer];
+        [sharedInstance setSmsTimer:smsTimer];
+        [sharedInstance setUdpSocket:[[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:socketQueue]];
+        NSError *error = nil;
+        if (![[sharedInstance tcpSocket] connectToHost:[sharedInstance serverIP] onPort:[[sharedInstance serverTCPPort] intValue] error:&error])
+        {
+            [sharedInstance setIsConnected:NO];
+            NSLog(@"Error connecting, will try again soon: %@", error);
+        } else {
+            [sharedInstance setIsConnected:YES];
+        }
     }
     return sharedInstance;
 }
@@ -44,42 +79,138 @@ static LocationsController *sharedInstance = nil;
     lastLocation = location;
 }
 
+- (void) reconnect {
+    NSError *error = nil;
+    if (![[sharedInstance tcpSocket] connectToHost:[sharedInstance serverIP] onPort:[[sharedInstance serverTCPPort] intValue] error:&error])
+    {
+        [sharedInstance setIsConnected:NO];
+        NSLog(@"Error connecting, will try again soon: %@", error);
+    } else {
+        [sharedInstance setIsConnected:YES];
+    }
+}
+
++(void) resetSMSEnabled {
+    [sharedInstance setIsSMSEnabled:YES];
+}
+
 +(void) sendLocation {
+    
+    //step 1 - insert location into DB
     [[DBManager getSharedInstance] insertUserLocation:[sharedInstance lastLocation]];
+    
+    //step 2 - check if user is within specified radius from his route
     if (![sharedInstance isInRange:[sharedInstance lastLocation]]) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Get back on track!"
+        [sharedInstance setRouteAlert:[[UIAlertView alloc] initWithTitle:@"Get back on track!"
                                                         message:@"You are too far away from route"
                                                        delegate:self
                                               cancelButtonTitle:@"OK"
-                                              otherButtonTitles:@"Help Me!" ,nil];
-        [alert show];
+                                              otherButtonTitles:@"Help Me!" ,nil]];
+        //if not display alert window
+        [[sharedInstance routeAlert] show];
     }
+    
+    //create message string
+    NSString *message;
+    NSData *data;
     if ([sharedInstance isFirstLocation]) {
-        [[TCPManager getSharedInstance] sendHiWithLocation:[sharedInstance lastLocation]];
-        [sharedInstance setIsFirstLocation:NO];
+        message = [sharedInstance getHiWithLastLocation];
     } else {
-        [[TCPManager getSharedInstance] sendLocation:[sharedInstance lastLocation]];
+        message = [sharedInstance getLastLocationMessage];
     }
+    data = [message dataUsingEncoding:NSUTF8StringEncoding];
+    
+    //step 3 - try sending location via TCP
+    if ([sharedInstance isConnected]) {
+        [[sharedInstance tcpSocket] writeData:data
+                                  withTimeout:-1
+                                          tag:1];
+        NSLog(@"Message %@ sent using TCP", message);
+    } else {
+        
+        //step 4 - if sending via TCP fails - send via UDP and via SMS
+        [[sharedInstance udpSocket] sendData:data
+                                      toHost:[sharedInstance serverIP]
+                                        port:[[sharedInstance serverUDPPort] intValue]
+                                 withTimeout:-1
+                                         tag:2];
+        NSLog(@"Message %@ sent using UDP", message);
+        
+        if ([sharedInstance isSMSEnabled]) {
+        [sharedInstance setSmsAlert:[[UIAlertView alloc] initWithTitle:@"Can't connect using TCP connection"
+                                                                 message:@"Do you want to send location via SMS>"
+                                                                delegate:self
+                                                       cancelButtonTitle:@"No"
+                                                       otherButtonTitles:@"Yes" ,nil]];
+        [[sharedInstance smsAlert] show];
+        }
+        //try reconnecting to host via tcp
+        [sharedInstance reconnect];
+    }
+}
+
+-(void) sendSMSWithLastLocation {
+    [sharedInstance sendSMSWithMessage:[sharedInstance getLastLocationMessage]];
+}
+
+-(void) sendSMSWithMessage: (NSString*) message {
+    MFMessageComposeViewController *controller = [[MFMessageComposeViewController alloc] init];
+    if([MFMessageComposeViewController canSendText])
+    {
+        controller.body = message;
+        NSMutableArray* contactsPhoneNumbers = [[NSMutableArray alloc] init];
+        [contactsPhoneNumbers addObject:[sharedInstance emergencyPhoneNumber]];
+        controller.recipients = contactsPhoneNumbers;
+        controller.messageComposeDelegate = self;
+        [[sharedInstance currentViewController] presentViewController:controller animated:YES completion:nil];
+    } else {
+        NSLog(@"Can't send SMS");
+    }
+
 }
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 0) {
-        NSLog(@"OK Tapped.");
+    if (alertView == [sharedInstance routeAlert]) {
+        if (buttonIndex == 0) {
+            NSLog(@"OK Tapped.");
+        }
+        else if (buttonIndex == 1) {
+            NSLog(@"Help Me! Tapped. Sending Emergency!");
+            [sharedInstance sendEmergencyWithLastKnownLocation];
+        }
     }
-    else if (buttonIndex == 1) {
-        NSLog(@"Help Me! Tapped. Sending Emergency!");
-        [sharedInstance sendEmergencyWithLastKnownLocation];
+    if (alertView == [sharedInstance smsAlert]) {
+        if (buttonIndex == 0) {
+            NSLog(@"No Tapped.");
+        }
+        else if (buttonIndex == 1) {
+            NSLog(@"Yes Tapped, sending SMS");
+            [sharedInstance sendSMSWithLastLocation];
+        }
     }
 }
-
-- (void)sendEmergencyWithLocation:(CLLocationCoordinate2D) location {
-    lastLocation = location;
-    [[DBManager getSharedInstance] insertUserLocation:location];
-    [[TCPManager getSharedInstance] sendEmergencyWithLocation:location];
-}
-
+//emergencies will be send via tcp, udp and sms simultaneously
 - (void)sendEmergencyWithLastKnownLocation {
-    [[TCPManager getSharedInstance] sendEmergencyWithLocation: [sharedInstance lastLocation]];
+    NSString *message;
+    NSData *data;
+    message = [sharedInstance getEmergencyWithLastLocation];
+    data = [message dataUsingEncoding:NSUTF8StringEncoding];
+    //step 1 - send via TCP
+    [[sharedInstance tcpSocket] writeData:data
+                              withTimeout:-1
+                                      tag:1];
+    NSLog(@"Message %@ sent using TCP", message);
+    
+    //step 2 - send via UDP
+    [[sharedInstance udpSocket] sendData:data
+                                  toHost:[sharedInstance serverIP]
+                                    port:[[sharedInstance serverUDPPort] intValue]
+                             withTimeout:-1
+                                     tag:2];
+    NSLog(@"Message %@ sent using UDP", message);
+    //send via SMS
+
+    [sharedInstance sendSMSWithMessage:message];
 }
 
 -(BOOL) isInRange:(CLLocationCoordinate2D) location {
@@ -149,5 +280,90 @@ static LocationsController *sharedInstance = nil;
         return YES;
     }
 }
+
+- (NSString*)getEmergencyWithLocation:(CLLocationCoordinate2D) location {
+    return [NSString stringWithFormat:@"EMG;%@;%f;%f\n", phoneNumber, location.latitude, location.longitude];
+}
+
+- (NSString*)getHiWithLocation:(CLLocationCoordinate2D) location {
+    return [NSString stringWithFormat:@"HI;%@;%@;%f;%f\n", phoneNumber, emergencyPhoneNumber, location.latitude, location.longitude];
+}
+
+- (NSString*)getLocationMessage:(CLLocationCoordinate2D) location {
+    return [NSString stringWithFormat:@"LOC;%@;%f;%f\n", phoneNumber, location.latitude, location.longitude];
+}
+
+- (NSString*)getEmergencyWithLastLocation {
+    return [NSString stringWithFormat:@"EMG;%@;%f;%f\n", phoneNumber, [sharedInstance lastLocation].latitude, [sharedInstance lastLocation].longitude];
+}
+
+- (NSString*)getHiWithLastLocation {
+    return [NSString stringWithFormat:@"HI;%@;%@;%f;%f\n", phoneNumber, emergencyPhoneNumber, [sharedInstance lastLocation].latitude, [sharedInstance lastLocation].longitude];
+}
+
+- (NSString*)getLastLocationMessage {
+    return [NSString stringWithFormat:@"LOC;%@;%f;%f\n", phoneNumber, [sharedInstance lastLocation].latitude, [sharedInstance lastLocation].longitude];
+}
+
+- (void)udpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag
+{
+    // not used
+}
+
+- (void)udpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error
+{
+    // not used
+}
+
+- (void)udpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext
+{
+    // not used
+}
+
+- (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(UInt16)port
+{
+    NSLog(@"socket:%p didConnectToHost:%@ port:%hu", sock, host, port);
+}
+
+- (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag
+{
+    NSLog(@"socket:%p didWriteDataWithTag:%ld", sock, tag);
+}
+
+- (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
+{
+    NSLog(@"socket:%p didReadData:withTag:%ld", sock, tag);
+    // application will not receive data from server hence there is nothing to do here
+}
+
+- (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err
+{
+    NSLog(@"socketDidDisconnect:%p withError: %@", sock, err);
+    [sharedInstance setIsConnected:NO];
+}
+
+- (void) setCurrentViewController:(UIViewController *)viewController {
+    [sharedInstance setCurrentViewController:viewController];
+}
+
+//działanie po wysłaniu SMSa
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
+{
+    switch (result) {
+        case MessageComposeResultCancelled:
+            NSLog(@"Cancelled");
+            break;
+        case MessageComposeResultFailed: {
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"SMS could not be sent" message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alert show];
+            break;}
+        case MessageComposeResultSent:
+            break;
+        default:
+            break;
+    }
+    [[sharedInstance currentViewController] dismissViewControllerAnimated:YES completion:nil];
+}
+
 
 @end

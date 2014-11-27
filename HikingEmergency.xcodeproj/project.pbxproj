@@ -22,7 +22,6 @@
 		45736DCD19D9CF9F00A485D6 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45736DCC19D9CF9F00A485D6 /* MapKit.framework */; };
 		45736DDD19DC6C3800A485D6 /* DBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 45736DD819DC6C3800A485D6 /* DBManager.m */; };
 		45736DDE19DC6C3800A485D6 /* MapPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 45736DDA19DC6C3800A485D6 /* MapPin.m */; };
-		45736DDF19DC6C3800A485D6 /* TCPManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 45736DDC19DC6C3800A485D6 /* TCPManager.m */; };
 		45792AD819E576C4003558EE /* Route.m in Sources */ = {isa = PBXBuildFile; fileRef = 45792AD719E576C4003558EE /* Route.m */; };
 		458D93211A19097D00A8464A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 458D93201A19097D00A8464A /* AVFoundation.framework */; };
 		458D93241A1909E400A8464A /* alarm.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 458D93231A1909E400A8464A /* alarm.mp3 */; };
@@ -31,6 +30,8 @@
 		458F316519E932480003B89D /* NavigateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 458F316419E932480003B89D /* NavigateViewController.m */; };
 		458F316819E9357B0003B89D /* WarningViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 458F316719E9357B0003B89D /* WarningViewController.m */; };
 		45B885E71A19181B00FB2728 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45B885E61A19181B00FB2728 /* CoreMotion.framework */; };
+		45C1088A1A27925F00918AA9 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 45C108871A27925F00918AA9 /* GCDAsyncSocket.m */; };
+		45C1088B1A27925F00918AA9 /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 45C108891A27925F00918AA9 /* GCDAsyncUdpSocket.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,8 +69,6 @@
 		45736DD819DC6C3800A485D6 /* DBManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBManager.m; sourceTree = "<group>"; };
 		45736DD919DC6C3800A485D6 /* MapPin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapPin.h; sourceTree = "<group>"; };
 		45736DDA19DC6C3800A485D6 /* MapPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapPin.m; sourceTree = "<group>"; };
-		45736DDB19DC6C3800A485D6 /* TCPManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCPManager.h; sourceTree = "<group>"; };
-		45736DDC19DC6C3800A485D6 /* TCPManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCPManager.m; sourceTree = "<group>"; };
 		45792AD619E576C4003558EE /* Route.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Route.h; sourceTree = "<group>"; };
 		45792AD719E576C4003558EE /* Route.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Route.m; sourceTree = "<group>"; };
 		458D93201A19097D00A8464A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -83,6 +82,10 @@
 		458F316619E9357B0003B89D /* WarningViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WarningViewController.h; sourceTree = "<group>"; };
 		458F316719E9357B0003B89D /* WarningViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WarningViewController.m; sourceTree = "<group>"; };
 		45B885E61A19181B00FB2728 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		45C108861A27925F00918AA9 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
+		45C108871A27925F00918AA9 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
+		45C108881A27925F00918AA9 /* GCDAsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncUdpSocket.h; sourceTree = "<group>"; };
+		45C108891A27925F00918AA9 /* GCDAsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncUdpSocket.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +140,7 @@
 		45736D9D19D9C9DA00A485D6 /* HikingEmergency */ = {
 			isa = PBXGroup;
 			children = (
+				45C108851A27921800918AA9 /* Libraries */,
 				45736DA219D9C9DA00A485D6 /* AppDelegate.h */,
 				45736DA319D9C9DA00A485D6 /* AppDelegate.m */,
 				45736DA519D9C9DA00A485D6 /* ViewController.h */,
@@ -148,8 +152,6 @@
 				45736DD819DC6C3800A485D6 /* DBManager.m */,
 				45736DD919DC6C3800A485D6 /* MapPin.h */,
 				45736DDA19DC6C3800A485D6 /* MapPin.m */,
-				45736DDB19DC6C3800A485D6 /* TCPManager.h */,
-				45736DDC19DC6C3800A485D6 /* TCPManager.m */,
 				45792AD619E576C4003558EE /* Route.h */,
 				45792AD719E576C4003558EE /* Route.m */,
 				45736D9E19D9C9DA00A485D6 /* Supporting Files */,
@@ -200,6 +202,17 @@
 				458D93231A1909E400A8464A /* alarm.mp3 */,
 			);
 			name = Sounds;
+			sourceTree = "<group>";
+		};
+		45C108851A27921800918AA9 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				45C108861A27925F00918AA9 /* GCDAsyncSocket.h */,
+				45C108871A27925F00918AA9 /* GCDAsyncSocket.m */,
+				45C108881A27925F00918AA9 /* GCDAsyncUdpSocket.h */,
+				45C108891A27925F00918AA9 /* GCDAsyncUdpSocket.m */,
+			);
+			name = Libraries;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -310,15 +323,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				45736DA719D9C9DA00A485D6 /* ViewController.m in Sources */,
+				45C1088A1A27925F00918AA9 /* GCDAsyncSocket.m in Sources */,
 				45736DDE19DC6C3800A485D6 /* MapPin.m in Sources */,
 				458F315F19E930270003B89D /* RoutesListViewController.m in Sources */,
+				45C1088B1A27925F00918AA9 /* GCDAsyncUdpSocket.m in Sources */,
 				45736DA419D9C9DA00A485D6 /* AppDelegate.m in Sources */,
 				45373BA61A17E7BB00B9D9CB /* LocationsController.m in Sources */,
 				458F316219E932370003B89D /* CreateRouteViewController.m in Sources */,
 				45736DA119D9C9DA00A485D6 /* main.m in Sources */,
 				45736DDD19DC6C3800A485D6 /* DBManager.m in Sources */,
 				458F316819E9357B0003B89D /* WarningViewController.m in Sources */,
-				45736DDF19DC6C3800A485D6 /* TCPManager.m in Sources */,
 				45792AD819E576C4003558EE /* Route.m in Sources */,
 				458F316519E932480003B89D /* NavigateViewController.m in Sources */,
 			);

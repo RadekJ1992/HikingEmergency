@@ -8,6 +8,18 @@
 			<key>Type</key>
 			<string>PSTextFieldSpecifier</string>
 			<key>Title</key>
+			<string>Port UDP Serwera</string>
+			<key>Key</key>
+			<string>serverUDPPort</string>
+			<key>DefaultValue</key>
+			<string>9001</string>
+			<key>KeyboardType</key>
+			<string>NumberPad</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSTextFieldSpecifier</string>
+			<key>Title</key>
 			<string>Numer telefonu użytkownika</string>
 			<key>Key</key>
 			<string>userPhoneNumber</string>
@@ -20,7 +32,7 @@
 			<key>Type</key>
 			<string>PSTextFieldSpecifier</string>
 			<key>Title</key>
-			<string>Port Serwera</string>
+			<string>Port TCP Serwera</string>
 			<key>Key</key>
 			<string>serverPort</string>
 			<key>KeyboardType</key>

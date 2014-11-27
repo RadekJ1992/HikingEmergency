@@ -9,6 +9,7 @@
 #import "RoutesListViewController.h"
 #import "AppDelegate.h"
 #import "NavigateViewController.h"
+#import "LocationsController.h"
 @interface RoutesListViewController ()
 
 @end
@@ -46,6 +47,7 @@
     self.routeTable.dataSource = self;
     self.routeTable.delegate = self;
     self.routeTable.allowsMultipleSelectionDuringEditing = NO;
+    [[LocationsController getSharedInstance] setCurrentViewController:self];
     routeNames = [[DBManager getSharedInstance] getAllRoutesNames];
 }
 
