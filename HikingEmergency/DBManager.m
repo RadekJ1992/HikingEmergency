@@ -195,14 +195,14 @@ static sqlite3_stmt *statement = nil;
         if (i== SQLITE_DONE)
         {
             NSLog(@"ok");
-            NSLog([NSString stringWithCString:insert_stmt encoding:NSASCIIStringEncoding]);
+            NSLog(@"%@", [NSString stringWithCString:insert_stmt encoding:NSASCIIStringEncoding]);
             sqlite3_reset(statement);
             sqlite3_close(database);
             return YES;
         }
         else {
             NSLog(@"no ok");
-            NSLog([NSString stringWithCString:insert_stmt encoding:NSASCIIStringEncoding]);
+            NSLog(@"%@", [NSString stringWithCString:insert_stmt encoding:NSASCIIStringEncoding]);
             sqlite3_reset(statement);
             sqlite3_close(database);
             return NO;

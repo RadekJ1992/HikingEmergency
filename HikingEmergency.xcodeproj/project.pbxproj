@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		451A80731A462203001E184E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 451A80721A462203001E184E /* SystemConfiguration.framework */; };
 		45373BA61A17E7BB00B9D9CB /* LocationsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 45373BA51A17E7BB00B9D9CB /* LocationsController.m */; };
 		45736DA119D9C9DA00A485D6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 45736DA019D9C9DA00A485D6 /* main.m */; };
 		45736DA419D9C9DA00A485D6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 45736DA319D9C9DA00A485D6 /* AppDelegate.m */; };
@@ -45,6 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		451A80721A462203001E184E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		45373BA41A17E7BB00B9D9CB /* LocationsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationsController.h; sourceTree = "<group>"; };
 		45373BA51A17E7BB00B9D9CB /* LocationsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationsController.m; sourceTree = "<group>"; };
 		45736D9B19D9C9DA00A485D6 /* HikingEmergency.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HikingEmergency.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -81,6 +83,7 @@
 		458F316419E932480003B89D /* NavigateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigateViewController.m; sourceTree = "<group>"; };
 		458F316619E9357B0003B89D /* WarningViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WarningViewController.h; sourceTree = "<group>"; };
 		458F316719E9357B0003B89D /* WarningViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WarningViewController.m; sourceTree = "<group>"; };
+		45988BCA1A3F5A9E004AF717 /* libcommonCrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcommonCrypto.dylib; path = usr/lib/system/libcommonCrypto.dylib; sourceTree = SDKROOT; };
 		45B885E61A19181B00FB2728 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		45C108861A27925F00918AA9 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
 		45C108871A27925F00918AA9 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
@@ -93,6 +96,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				451A80731A462203001E184E /* SystemConfiguration.framework in Frameworks */,
 				45B885E71A19181B00FB2728 /* CoreMotion.framework in Frameworks */,
 				458D93211A19097D00A8464A /* AVFoundation.framework in Frameworks */,
 				45736DCD19D9CF9F00A485D6 /* MapKit.framework in Frameworks */,
@@ -115,6 +119,8 @@
 		45736D9219D9C9D900A485D6 = {
 			isa = PBXGroup;
 			children = (
+				451A80721A462203001E184E /* SystemConfiguration.framework */,
+				45988BCA1A3F5A9E004AF717 /* libcommonCrypto.dylib */,
 				45B885E61A19181B00FB2728 /* CoreMotion.framework */,
 				458D93201A19097D00A8464A /* AVFoundation.framework */,
 				45736DCC19D9CF9F00A485D6 /* MapKit.framework */,
@@ -458,6 +464,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = HikingEmergency/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/system",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -468,6 +478,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = HikingEmergency/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/system",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

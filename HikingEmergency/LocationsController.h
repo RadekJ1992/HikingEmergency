@@ -14,7 +14,6 @@
 #import "GCDAsyncSocket.h"
 #import "GCDAsyncUdpSocket.h"
 #import "AppDelegate.h"
-
 /**
  Singleton obsługujący wysyłanie informacji o lokalizacji
  */
@@ -37,12 +36,13 @@
 @property (weak, nonatomic) NSString* emergencyPhoneNumber;
 @property (weak, nonatomic) UIAlertView* routeAlert;
 @property (weak, nonatomic) UIAlertView* smsAlert;
-@property (weak, nonatomic) UIViewController* currentViewController;
 
+@property (nonatomic) BOOL isNavigating;
 
 +(LocationsController*)getSharedInstance;
 
 - (void)addLocation:(CLLocationCoordinate2D) location;
 
 - (void)sendEmergencyWithLastKnownLocation;
+
 @end

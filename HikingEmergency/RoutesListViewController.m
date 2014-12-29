@@ -47,7 +47,6 @@
     self.routeTable.dataSource = self;
     self.routeTable.delegate = self;
     self.routeTable.allowsMultipleSelectionDuringEditing = NO;
-    [[LocationsController getSharedInstance] setCurrentViewController:self];
     routeNames = [[DBManager getSharedInstance] getAllRoutesNames];
 }
 

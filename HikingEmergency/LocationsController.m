@@ -6,12 +6,15 @@
 //  Copyright (c) 2014 Radosław Jarzynka. All rights reserved.
 //
 
+#import <CommonCrypto/CommonCryptor.h>
 #import "LocationsController.h"
 
 @implementation LocationsController
 
 static LocationsController *sharedInstance = nil;
 static dispatch_queue_t socketQueue;
+
+static NSString* aesKey = @"hikingEmergencyKey";
 
 @synthesize isFirstLocation;
 @synthesize isConnected;
@@ -30,7 +33,6 @@ static dispatch_queue_t socketQueue;
 @synthesize emergencyPhoneNumber;
 @synthesize routeAlert;
 @synthesize smsAlert;
-@synthesize currentViewController;
 
 +(LocationsController*)getSharedInstance {
     if (!sharedInstance) {
@@ -47,18 +49,22 @@ static dispatch_queue_t socketQueue;
         [sharedInstance setServerUDPPort:[standardUserDefaults objectForKey:@"serverUDPPort"]];
         [sharedInstance setPhoneNumber: [standardUserDefaults objectForKey:@"userPhoneNumber"]];
         [sharedInstance setEmergencyPhoneNumber:[standardUserDefaults objectForKey:@"emergencyPhoneNumber"]];
+        
         NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:30.0
                                                           target:self
                                                         selector:@selector(sendLocation)
                                                         userInfo:sharedInstance
                                                          repeats:YES];
+        
         //user will be asked to send SMS with his location only once every 10 minutes (except for emergencies)
         NSTimer *smsTimer = [NSTimer scheduledTimerWithTimeInterval:600.0
                                                           target:self
                                                         selector:@selector(resetSMSEnabled)
                                                         userInfo:sharedInstance
                                                          repeats:YES];
+        
         socketQueue = dispatch_queue_create("socketQueue", NULL);
+        
         [sharedInstance setTcpSocket:[[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:socketQueue]];
         [sharedInstance setTimer: timer];
         [sharedInstance setSmsTimer:smsTimer];
@@ -71,6 +77,7 @@ static dispatch_queue_t socketQueue;
         } else {
             [sharedInstance setIsConnected:YES];
         }
+        
     }
     return sharedInstance;
 }
@@ -95,57 +102,58 @@ static dispatch_queue_t socketQueue;
 }
 
 +(void) sendLocation {
-    
-    //step 1 - insert location into DB
-    [[DBManager getSharedInstance] insertUserLocation:[sharedInstance lastLocation]];
-    
-    //step 2 - check if user is within specified radius from his route
-    if (![sharedInstance isInRange:[sharedInstance lastLocation]]) {
-        [sharedInstance setRouteAlert:[[UIAlertView alloc] initWithTitle:@"Get back on track!"
-                                                        message:@"You are too far away from route"
-                                                       delegate:self
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:@"Help Me!" ,nil]];
-        //if not display alert window
-        [[sharedInstance routeAlert] show];
-    }
-    
-    //create message string
-    NSString *message;
-    NSData *data;
-    if ([sharedInstance isFirstLocation]) {
-        message = [sharedInstance getHiWithLastLocation];
-    } else {
-        message = [sharedInstance getLastLocationMessage];
-    }
-    data = [message dataUsingEncoding:NSUTF8StringEncoding];
-    
-    //step 3 - try sending location via TCP
-    if ([sharedInstance isConnected]) {
-        [[sharedInstance tcpSocket] writeData:data
-                                  withTimeout:-1
-                                          tag:1];
-        NSLog(@"Message %@ sent using TCP", message);
-    } else {
+    if ([sharedInstance isNavigating]) {
+        //step 1 - insert location into DB
+        [[DBManager getSharedInstance] insertUserLocation:[sharedInstance lastLocation]];
         
-        //step 4 - if sending via TCP fails - send via UDP and via SMS
-        [[sharedInstance udpSocket] sendData:data
-                                      toHost:[sharedInstance serverIP]
-                                        port:[[sharedInstance serverUDPPort] intValue]
-                                 withTimeout:-1
-                                         tag:2];
-        NSLog(@"Message %@ sent using UDP", message);
-        
-        if ([sharedInstance isSMSEnabled]) {
-        [sharedInstance setSmsAlert:[[UIAlertView alloc] initWithTitle:@"Can't connect using TCP connection"
-                                                                 message:@"Do you want to send location via SMS>"
-                                                                delegate:self
-                                                       cancelButtonTitle:@"No"
-                                                       otherButtonTitles:@"Yes" ,nil]];
-        [[sharedInstance smsAlert] show];
+        //step 2 - check if user is within specified radius from his route
+        if (![sharedInstance isInRange:[sharedInstance lastLocation]]) {
+            [sharedInstance setRouteAlert:[[UIAlertView alloc] initWithTitle:@"Get back on track!"
+                                                            message:@"You are too far away from route"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:@"Help Me!" ,nil]];
+            //if not display alert window
+            [[sharedInstance routeAlert] show];
         }
-        //try reconnecting to host via tcp
-        [sharedInstance reconnect];
+        
+        //create message string
+        NSString *message;
+        NSData *data;
+        if ([sharedInstance isFirstLocation]) {
+            message = [sharedInstance getHiWithLastLocation];
+        } else {
+            message = [sharedInstance getLastLocationMessage];
+        }
+        data = [message dataUsingEncoding:NSUTF8StringEncoding];
+        
+        //step 3 - try sending location via TCP
+        if ([sharedInstance isConnected]) {
+            [[sharedInstance tcpSocket] writeData:data
+                                      withTimeout:-1
+                                              tag:1];
+            NSLog(@"Message %@ sent using TCP", message);
+        } else {
+            
+            //step 4 - if sending via TCP fails - send via UDP and via SMS
+            [[sharedInstance udpSocket] sendData:data
+                                          toHost:[sharedInstance serverIP]
+                                            port:[[sharedInstance serverUDPPort] intValue]
+                                     withTimeout:-1
+                                             tag:2];
+            NSLog(@"Message %@ sent using UDP", message);
+            
+            if ([sharedInstance isSMSEnabled]) {
+            [sharedInstance setSmsAlert:[[UIAlertView alloc] initWithTitle:@"Can't connect using TCP connection"
+                                                                     message:@"Do you want to send location via SMS>"
+                                                                    delegate:self
+                                                           cancelButtonTitle:@"No"
+                                                           otherButtonTitles:@"Yes" ,nil]];
+            [[sharedInstance smsAlert] show];
+            }
+            //try reconnecting to host via tcp
+            [sharedInstance reconnect];
+        }
     }
 }
 
@@ -162,7 +170,6 @@ static dispatch_queue_t socketQueue;
         [contactsPhoneNumbers addObject:[sharedInstance emergencyPhoneNumber]];
         controller.recipients = contactsPhoneNumbers;
         controller.messageComposeDelegate = self;
-        [[sharedInstance currentViewController] presentViewController:controller animated:YES completion:nil];
     } else {
         NSLog(@"Can't send SMS");
     }
@@ -342,9 +349,6 @@ static dispatch_queue_t socketQueue;
     [sharedInstance setIsConnected:NO];
 }
 
-- (void) setCurrentViewController:(UIViewController *)viewController {
-    [sharedInstance setCurrentViewController:viewController];
-}
 
 //działanie po wysłaniu SMSa
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
@@ -362,8 +366,6 @@ static dispatch_queue_t socketQueue;
         default:
             break;
     }
-    [[sharedInstance currentViewController] dismissViewControllerAnimated:YES completion:nil];
 }
-
 
 @end

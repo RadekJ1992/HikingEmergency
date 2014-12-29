@@ -38,7 +38,6 @@ int timeValue = 60;
     [super viewDidLoad];
     NSString *path = [NSString stringWithFormat:@"%@/alarm.mp3", [[NSBundle mainBundle] resourcePath]];
     NSURL *fileURL = [NSURL fileURLWithPath:path];
-    [[LocationsController getSharedInstance] setCurrentViewController:self];
     audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:nil];
     NSTimer *countdownTimer = [NSTimer scheduledTimerWithTimeInterval:1
                                                                target:self

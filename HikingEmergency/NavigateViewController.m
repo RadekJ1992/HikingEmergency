@@ -48,13 +48,17 @@
     isCurrentlyStationary = false;
     [[self mapView] setDelegate:self];
     [super viewDidLoad];
+    if ([[LocationsController getSharedInstance] isNavigating]) {
+        [[self StartStopButton] setTitle:@"Stop" forState:UIControlStateNormal];
+    } else {
+        [[self StartStopButton] setTitle:@"Start" forState:UIControlStateNormal];
+    }
     self.motionActivityManager=[[CMMotionActivityManager alloc]init];
     //wyświetlenie mapy
     MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance([[[route getRoutePoints] firstObject] coordinate], 1000, 1000);
     MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion];
     [mapView setRegion:adjustedRegion animated:YES];
     mapView.showsUserLocation = YES;
-    [[LocationsController getSharedInstance] setCurrentViewController:self];
     [self.motionActivityManager startActivityUpdatesToQueue:[NSOperationQueue mainQueue] withHandler:^(CMMotionActivity *activity)
      {
          if (activity.stationary == YES) {
@@ -132,5 +136,17 @@
     [super didReceiveMemoryWarning];
 }
 
+
+- (IBAction)StartStopButtonPressed:(id)sender {
+    if ([[LocationsController getSharedInstance] isNavigating]) {
+        [[self StartStopButton] setTitle:@"Stop" forState:UIControlStateNormal];
+        [[LocationsController getSharedInstance] setIsNavigating:NO];
+        
+    } else {
+        [[self StartStopButton] setTitle:@"Start" forState:UIControlStateNormal];
+        [[LocationsController getSharedInstance] setRoute:[self route]];
+        [[LocationsController getSharedInstance] setIsNavigating:YES];
+    }
+}
 
 @end

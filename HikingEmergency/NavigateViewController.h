@@ -21,6 +21,9 @@
 @property (nonatomic,strong) CMMotionActivityManager *motionActivityManager;
 @property (weak) NSTimer *timer;
 @property (nonatomic) BOOL isCurrentlyStationary;
+@property (weak, nonatomic) IBOutlet UIButton *StartStopButton;
+
+- (IBAction)StartStopButtonPressed:(id)sender;
 
 
 @end
