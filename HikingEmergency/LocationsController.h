@@ -8,16 +8,16 @@
 
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
-#import <MessageUI/MessageUI.h>
 #import "DBManager.h"
 #import "Route.h"
 #import "GCDAsyncSocket.h"
 #import "GCDAsyncUdpSocket.h"
 #import "AppDelegate.h"
+#import "Observed.h"
 /**
  Singleton obsługujący wysyłanie informacji o lokalizacji
  */
-@interface LocationsController : NSObject <UIAlertViewDelegate, MFMessageComposeViewControllerDelegate>
+@interface LocationsController : NSObject <Observed>
 
 @property bool isFirstLocation;
 @property bool isConnected;
@@ -34,8 +34,9 @@
 @property (weak, nonatomic) NSString* serverUDPPort;
 @property (weak, nonatomic) NSString* phoneNumber;
 @property (weak, nonatomic) NSString* emergencyPhoneNumber;
-@property (weak, nonatomic) UIAlertView* routeAlert;
-@property (weak, nonatomic) UIAlertView* smsAlert;
+//@property (weak, nonatomic) UIAlertView* routeAlert;
+//@property (weak, nonatomic) UIAlertView* smsAlert;
+@property (strong, nonatomic) NSMutableArray* observers;
 
 @property (nonatomic) BOOL isNavigating;
 
@@ -45,4 +46,7 @@
 
 - (void)sendEmergencyWithLastKnownLocation;
 
+//-(void) sendSMSWithLastLocation;
+
+- (NSString*)getLastLocationMessage;
 @end

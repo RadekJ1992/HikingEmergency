@@ -9,10 +9,12 @@
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
 #import <CoreMotion/CoreMotion.h>
+#import <MessageUI/MessageUI.h>
 #import "Route.h"
 #import "MapPin.h"
+#import "Observer.h"
 
-@interface NavigateViewController : UIViewController <MKMapViewDelegate>
+@interface NavigateViewController : UIViewController <MFMessageComposeViewControllerDelegate, UIAlertViewDelegate, MKMapViewDelegate, Observer>
 
 @property (nonatomic, retain) IBOutlet MKMapView *mapView;
 @property (strong, nonatomic) Route* route;
@@ -22,6 +24,8 @@
 @property (weak) NSTimer *timer;
 @property (nonatomic) BOOL isCurrentlyStationary;
 @property (weak, nonatomic) IBOutlet UIButton *StartStopButton;
+@property (weak, nonatomic) UIAlertView* routeAlert;
+@property (weak, nonatomic) UIAlertView* smsAlert;
 
 - (IBAction)StartStopButtonPressed:(id)sender;
 

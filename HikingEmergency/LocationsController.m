@@ -6,15 +6,12 @@
 //  Copyright (c) 2014 Radosław Jarzynka. All rights reserved.
 //
 
-#import <CommonCrypto/CommonCryptor.h>
 #import "LocationsController.h"
 
 @implementation LocationsController
 
 static LocationsController *sharedInstance = nil;
 static dispatch_queue_t socketQueue;
-
-static NSString* aesKey = @"hikingEmergencyKey";
 
 @synthesize isFirstLocation;
 @synthesize isConnected;
@@ -31,8 +28,9 @@ static NSString* aesKey = @"hikingEmergencyKey";
 @synthesize serverUDPPort;
 @synthesize phoneNumber;
 @synthesize emergencyPhoneNumber;
-@synthesize routeAlert;
-@synthesize smsAlert;
+//@synthesize routeAlert;
+//@synthesize smsAlert;
+@synthesize observers;
 
 +(LocationsController*)getSharedInstance {
     if (!sharedInstance) {
@@ -108,13 +106,14 @@ static NSString* aesKey = @"hikingEmergencyKey";
         
         //step 2 - check if user is within specified radius from his route
         if (![sharedInstance isInRange:[sharedInstance lastLocation]]) {
-            [sharedInstance setRouteAlert:[[UIAlertView alloc] initWithTitle:@"Get back on track!"
-                                                            message:@"You are too far away from route"
-                                                           delegate:self
-                                                  cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:@"Help Me!" ,nil]];
-            //if not display alert window
-            [[sharedInstance routeAlert] show];
+//            [sharedInstance setRouteAlert:[[UIAlertView alloc] initWithTitle:@"Get back on track!"
+//                                                            message:@"You are too far away from route"
+//                                                           delegate:self
+//                                                  cancelButtonTitle:@"OK"
+//                                                  otherButtonTitles:@"Help Me!" ,nil]];
+//            //if not display alert window
+//            [[sharedInstance routeAlert] show];
+            [sharedInstance notifyObserversRoute];
         }
         
         //create message string
@@ -144,12 +143,13 @@ static NSString* aesKey = @"hikingEmergencyKey";
             NSLog(@"Message %@ sent using UDP", message);
             
             if ([sharedInstance isSMSEnabled]) {
-            [sharedInstance setSmsAlert:[[UIAlertView alloc] initWithTitle:@"Can't connect using TCP connection"
-                                                                     message:@"Do you want to send location via SMS>"
-                                                                    delegate:self
-                                                           cancelButtonTitle:@"No"
-                                                           otherButtonTitles:@"Yes" ,nil]];
-            [[sharedInstance smsAlert] show];
+//            [sharedInstance setSmsAlert:[[UIAlertView alloc] initWithTitle:@"Can't connect using TCP connection"
+//                                                                     message:@"Do you want to send location via SMS>"
+//                                                                    delegate:self
+//                                                           cancelButtonTitle:@"No"
+//                                                           otherButtonTitles:@"Yes" ,nil]];
+//            [[sharedInstance smsAlert] show];
+                [sharedInstance notifyObserversSms];
             }
             //try reconnecting to host via tcp
             [sharedInstance reconnect];
@@ -157,46 +157,47 @@ static NSString* aesKey = @"hikingEmergencyKey";
     }
 }
 
--(void) sendSMSWithLastLocation {
-    [sharedInstance sendSMSWithMessage:[sharedInstance getLastLocationMessage]];
-}
+//-(void) sendSMSWithLastLocation {
+//    [sharedInstance sendSMSWithMessage:[sharedInstance getLastLocationMessage]];
+//}
 
--(void) sendSMSWithMessage: (NSString*) message {
-    MFMessageComposeViewController *controller = [[MFMessageComposeViewController alloc] init];
-    if([MFMessageComposeViewController canSendText])
-    {
-        controller.body = message;
-        NSMutableArray* contactsPhoneNumbers = [[NSMutableArray alloc] init];
-        [contactsPhoneNumbers addObject:[sharedInstance emergencyPhoneNumber]];
-        controller.recipients = contactsPhoneNumbers;
-        controller.messageComposeDelegate = self;
-    } else {
-        NSLog(@"Can't send SMS");
-    }
+//-(void) sendSMSWithMessage: (NSString*) message {
+//    MFMessageComposeViewController *controller = [[MFMessageComposeViewController alloc] init];
+//    if([MFMessageComposeViewController canSendText])
+//    {
+//        controller.body = message;
+//        NSMutableArray* contactsPhoneNumbers = [[NSMutableArray alloc] init];
+//        [contactsPhoneNumbers addObject:[sharedInstance emergencyPhoneNumber]];
+//        controller.recipients = contactsPhoneNumbers;
+//        controller.messageComposeDelegate = self;
+//    } else {
+//        NSLog(@"Can't send SMS");
+//    }
+//
+//}
 
-}
-
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    if (alertView == [sharedInstance routeAlert]) {
-        if (buttonIndex == 0) {
-            NSLog(@"OK Tapped.");
-        }
-        else if (buttonIndex == 1) {
-            NSLog(@"Help Me! Tapped. Sending Emergency!");
-            [sharedInstance sendEmergencyWithLastKnownLocation];
-        }
-    }
-    if (alertView == [sharedInstance smsAlert]) {
-        if (buttonIndex == 0) {
-            NSLog(@"No Tapped.");
-        }
-        else if (buttonIndex == 1) {
-            NSLog(@"Yes Tapped, sending SMS");
-            [sharedInstance sendSMSWithLastLocation];
-        }
-    }
-}
+//- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+//    if (alertView == [sharedInstance routeAlert]) {
+//        if (buttonIndex == 0) {
+//            NSLog(@"OK Tapped.");
+//        }
+//        else if (buttonIndex == 1) {
+//            NSLog(@"Help Me! Tapped. Sending Emergency!");
+//            [sharedInstance sendEmergencyWithLastKnownLocation];
+//        }
+//    }
+//    if (alertView == [sharedInstance smsAlert]) {
+//        if (buttonIndex == 0) {
+//            NSLog(@"No Tapped.");
+//        }
+//        else if (buttonIndex == 1) {
+//            NSLog(@"Yes Tapped, sending SMS");
+//            [sharedInstance sendSMSWithLastLocation];
+//        }
+//    }
+//}
 //emergencies will be send via tcp, udp and sms simultaneously
+
 - (void)sendEmergencyWithLastKnownLocation {
     NSString *message;
     NSData *data;
@@ -217,7 +218,7 @@ static NSString* aesKey = @"hikingEmergencyKey";
     NSLog(@"Message %@ sent using UDP", message);
     //send via SMS
 
-    [sharedInstance sendSMSWithMessage:message];
+    //[sharedInstance sendSMSWithMessage:message];
 }
 
 -(BOOL) isInRange:(CLLocationCoordinate2D) location {
@@ -350,21 +351,47 @@ static NSString* aesKey = @"hikingEmergencyKey";
 }
 
 
-//działanie po wysłaniu SMSa
-- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
-{
-    switch (result) {
-        case MessageComposeResultCancelled:
-            NSLog(@"Cancelled");
-            break;
-        case MessageComposeResultFailed: {
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"SMS could not be sent" message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alert show];
-            break;}
-        case MessageComposeResultSent:
-            break;
-        default:
-            break;
+////działanie po wysłaniu SMSa
+//- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
+//{
+//    switch (result) {
+//        case MessageComposeResultCancelled:
+//            NSLog(@"Cancelled");
+//            break;
+//        case MessageComposeResultFailed: {
+//            UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"SMS could not be sent" message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//            [alert show];
+//            break;}
+//        case MessageComposeResultSent:
+//            break;
+//        default:
+//            break;
+//    }
+//}
+
+-(void) addObserver:(id <Observer>) observer {
+    if (![sharedInstance observers]) {
+        [sharedInstance setObservers:[[NSMutableArray alloc] init]];
+    }
+    if (![[sharedInstance observers] containsObject:observer]) {
+        [[sharedInstance observers] addObject:observer];
+    }
+}
+
+-(void) removeObserver:(id <Observer>) observer {
+    if ([[sharedInstance observers] containsObject:observer]) {
+        [[sharedInstance observers] removeObject:observer];
+    }
+}
+
+-(void) notifyObserversSms {
+    for (id <Observer> observer in [sharedInstance observers]) {
+        [observer notifySms];
+    }
+}
+-(void) notifyObserversRoute {
+    for (id <Observer> observer in [sharedInstance observers]) {
+        [observer notifyRoute];
     }
 }
 

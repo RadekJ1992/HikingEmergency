@@ -73,6 +73,8 @@
 		45736DDA19DC6C3800A485D6 /* MapPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapPin.m; sourceTree = "<group>"; };
 		45792AD619E576C4003558EE /* Route.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Route.h; sourceTree = "<group>"; };
 		45792AD719E576C4003558EE /* Route.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Route.m; sourceTree = "<group>"; };
+		458D43AA1A51C301007E10CA /* Observer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Observer.h; sourceTree = "<group>"; };
+		458D43AB1A51C321007E10CA /* Observed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Observed.h; sourceTree = "<group>"; };
 		458D93201A19097D00A8464A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		458D93231A1909E400A8464A /* alarm.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = alarm.mp3; sourceTree = "<group>"; };
 		458F315D19E930270003B89D /* RoutesListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoutesListViewController.h; sourceTree = "<group>"; };
@@ -172,6 +174,8 @@
 				45373BA41A17E7BB00B9D9CB /* LocationsController.h */,
 				45373BA51A17E7BB00B9D9CB /* LocationsController.m */,
 				458D93221A1909A200A8464A /* Sounds */,
+				458D43AA1A51C301007E10CA /* Observer.h */,
+				458D43AB1A51C321007E10CA /* Observed.h */,
 			);
 			path = HikingEmergency;
 			sourceTree = "<group>";

@@ -22,6 +22,8 @@
 @synthesize lineView;
 @synthesize motionActivityManager;
 @synthesize timer;
+@synthesize routeAlert;
+@synthesize smsAlert;
 
 /**
  obsługa przekazywania obiektów między viewControllerami
@@ -48,6 +50,7 @@
     isCurrentlyStationary = false;
     [[self mapView] setDelegate:self];
     [super viewDidLoad];
+    [[LocationsController getSharedInstance] addObserver:self];
     if ([[LocationsController getSharedInstance] isNavigating]) {
         [[self StartStopButton] setTitle:@"Stop" forState:UIControlStateNormal];
     } else {
@@ -139,13 +142,94 @@
 
 - (IBAction)StartStopButtonPressed:(id)sender {
     if ([[LocationsController getSharedInstance] isNavigating]) {
-        [[self StartStopButton] setTitle:@"Stop" forState:UIControlStateNormal];
+        [[self StartStopButton] setTitle:@"Start" forState:UIControlStateNormal];
         [[LocationsController getSharedInstance] setIsNavigating:NO];
         
     } else {
-        [[self StartStopButton] setTitle:@"Start" forState:UIControlStateNormal];
+        [[self StartStopButton] setTitle:@"Stop" forState:UIControlStateNormal];
         [[LocationsController getSharedInstance] setRoute:[self route]];
         [[LocationsController getSharedInstance] setIsNavigating:YES];
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    if (alertView == [self routeAlert]) {
+        if (buttonIndex == 0) {
+            NSLog(@"OK Tapped.");
+        }
+        else if (buttonIndex == 1) {
+            NSLog(@"Help Me! Tapped. Sending Emergency!");
+            [[LocationsController getSharedInstance] sendEmergencyWithLastKnownLocation];
+        }
+    }
+    if (alertView == [self smsAlert]) {
+        if (buttonIndex == 0) {
+            NSLog(@"No Tapped.");
+        }
+        else if (buttonIndex == 1) {
+            NSLog(@"Yes Tapped, sending SMS");
+            [self sendSMSWithLastLocation];
+        }
+    }
+}
+
+-(void) notifySms {
+    [self setSmsAlert:[[UIAlertView alloc] initWithTitle:@"Can't connect using TCP connection"
+                                                           message:@"Do you want to send location via SMS>"
+                                                          delegate:self
+                                                 cancelButtonTitle:@"No"
+                                                 otherButtonTitles:@"Yes" ,nil]];
+    [[self smsAlert] show];
+
+}
+
+-(void) notifyRoute {
+    [self setRouteAlert:[[UIAlertView alloc] initWithTitle:@"Get back on track!"
+                                                             message:@"You are too far away from route"
+                                                            delegate:self
+                                                   cancelButtonTitle:@"OK"
+                                                   otherButtonTitles:@"Help Me!" ,nil]];
+    //if not display alert window
+    [[self routeAlert] show];
+}
+
+-(void) viewWillDisappear:(BOOL)animated {
+    [[LocationsController getSharedInstance] removeObserver:self];
+}
+
+-(void) sendSMSWithMessage: (NSString*) message {
+    MFMessageComposeViewController *controller = [[MFMessageComposeViewController alloc] init];
+    if([MFMessageComposeViewController canSendText])
+    {
+        controller.body = message;
+        NSMutableArray* contactsPhoneNumbers = [[NSMutableArray alloc] init];
+        [contactsPhoneNumbers addObject:[[LocationsController getSharedInstance] emergencyPhoneNumber]];
+        controller.recipients = contactsPhoneNumbers;
+        [controller setMessageComposeDelegate: self];
+    } else {
+        NSLog(@"Can't send SMS");
+    }
+}
+
+-(void) sendSMSWithLastLocation {
+    [self sendSMSWithMessage:[[LocationsController getSharedInstance] getLastLocationMessage]];
+}
+
+//działanie po wysłaniu SMSa
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
+{
+    switch (result) {
+        case MessageComposeResultCancelled:
+            NSLog(@"Cancelled");
+            break;
+        case MessageComposeResultFailed: {
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"SMS could not be sent" message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alert show];
+            break;}
+        case MessageComposeResultSent:
+            break;
+        default:
+            break;
     }
 }
 
