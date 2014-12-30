@@ -152,6 +152,10 @@
     }
 }
 
+- (IBAction)test:(id)sender {
+    [self notifyRoute];
+}
+
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     if (alertView == [self routeAlert]) {
         if (buttonIndex == 0) {
@@ -190,7 +194,7 @@
                                                    cancelButtonTitle:@"OK"
                                                    otherButtonTitles:@"Help Me!" ,nil]];
     //if not display alert window
-    [[self routeAlert] show];
+   [[self routeAlert] show];
 }
 
 -(void) viewWillDisappear:(BOOL)animated {

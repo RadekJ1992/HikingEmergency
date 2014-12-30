@@ -24,10 +24,9 @@
 @property (weak) NSTimer *timer;
 @property (nonatomic) BOOL isCurrentlyStationary;
 @property (weak, nonatomic) IBOutlet UIButton *StartStopButton;
-@property (weak, nonatomic) UIAlertView* routeAlert;
-@property (weak, nonatomic) UIAlertView* smsAlert;
+@property (strong, nonatomic) UIAlertView* routeAlert;
+@property (strong, nonatomic) UIAlertView* smsAlert;
 
 - (IBAction)StartStopButtonPressed:(id)sender;
-
 
 @end

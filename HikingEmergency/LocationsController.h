@@ -34,8 +34,6 @@
 @property (weak, nonatomic) NSString* serverUDPPort;
 @property (weak, nonatomic) NSString* phoneNumber;
 @property (weak, nonatomic) NSString* emergencyPhoneNumber;
-//@property (weak, nonatomic) UIAlertView* routeAlert;
-//@property (weak, nonatomic) UIAlertView* smsAlert;
 @property (strong, nonatomic) NSMutableArray* observers;
 
 @property (nonatomic) BOOL isNavigating;
@@ -45,8 +43,6 @@
 - (void)addLocation:(CLLocationCoordinate2D) location;
 
 - (void)sendEmergencyWithLastKnownLocation;
-
-//-(void) sendSMSWithLastLocation;
 
 - (NSString*)getLastLocationMessage;
 @end

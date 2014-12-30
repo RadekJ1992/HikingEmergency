@@ -28,8 +28,6 @@ static dispatch_queue_t socketQueue;
 @synthesize serverUDPPort;
 @synthesize phoneNumber;
 @synthesize emergencyPhoneNumber;
-//@synthesize routeAlert;
-//@synthesize smsAlert;
 @synthesize observers;
 
 +(LocationsController*)getSharedInstance {
@@ -106,13 +104,6 @@ static dispatch_queue_t socketQueue;
         
         //step 2 - check if user is within specified radius from his route
         if (![sharedInstance isInRange:[sharedInstance lastLocation]]) {
-//            [sharedInstance setRouteAlert:[[UIAlertView alloc] initWithTitle:@"Get back on track!"
-//                                                            message:@"You are too far away from route"
-//                                                           delegate:self
-//                                                  cancelButtonTitle:@"OK"
-//                                                  otherButtonTitles:@"Help Me!" ,nil]];
-//            //if not display alert window
-//            [[sharedInstance routeAlert] show];
             [sharedInstance notifyObserversRoute];
         }
         
@@ -143,12 +134,6 @@ static dispatch_queue_t socketQueue;
             NSLog(@"Message %@ sent using UDP", message);
             
             if ([sharedInstance isSMSEnabled]) {
-//            [sharedInstance setSmsAlert:[[UIAlertView alloc] initWithTitle:@"Can't connect using TCP connection"
-//                                                                     message:@"Do you want to send location via SMS>"
-//                                                                    delegate:self
-//                                                           cancelButtonTitle:@"No"
-//                                                           otherButtonTitles:@"Yes" ,nil]];
-//            [[sharedInstance smsAlert] show];
                 [sharedInstance notifyObserversSms];
             }
             //try reconnecting to host via tcp
@@ -156,46 +141,6 @@ static dispatch_queue_t socketQueue;
         }
     }
 }
-
-//-(void) sendSMSWithLastLocation {
-//    [sharedInstance sendSMSWithMessage:[sharedInstance getLastLocationMessage]];
-//}
-
-//-(void) sendSMSWithMessage: (NSString*) message {
-//    MFMessageComposeViewController *controller = [[MFMessageComposeViewController alloc] init];
-//    if([MFMessageComposeViewController canSendText])
-//    {
-//        controller.body = message;
-//        NSMutableArray* contactsPhoneNumbers = [[NSMutableArray alloc] init];
-//        [contactsPhoneNumbers addObject:[sharedInstance emergencyPhoneNumber]];
-//        controller.recipients = contactsPhoneNumbers;
-//        controller.messageComposeDelegate = self;
-//    } else {
-//        NSLog(@"Can't send SMS");
-//    }
-//
-//}
-
-//- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-//    if (alertView == [sharedInstance routeAlert]) {
-//        if (buttonIndex == 0) {
-//            NSLog(@"OK Tapped.");
-//        }
-//        else if (buttonIndex == 1) {
-//            NSLog(@"Help Me! Tapped. Sending Emergency!");
-//            [sharedInstance sendEmergencyWithLastKnownLocation];
-//        }
-//    }
-//    if (alertView == [sharedInstance smsAlert]) {
-//        if (buttonIndex == 0) {
-//            NSLog(@"No Tapped.");
-//        }
-//        else if (buttonIndex == 1) {
-//            NSLog(@"Yes Tapped, sending SMS");
-//            [sharedInstance sendSMSWithLastLocation];
-//        }
-//    }
-//}
 //emergencies will be send via tcp, udp and sms simultaneously
 
 - (void)sendEmergencyWithLastKnownLocation {
@@ -349,25 +294,6 @@ static dispatch_queue_t socketQueue;
     NSLog(@"socketDidDisconnect:%p withError: %@", sock, err);
     [sharedInstance setIsConnected:NO];
 }
-
-
-////działanie po wysłaniu SMSa
-//- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
-//{
-//    switch (result) {
-//        case MessageComposeResultCancelled:
-//            NSLog(@"Cancelled");
-//            break;
-//        case MessageComposeResultFailed: {
-//            UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"SMS could not be sent" message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//            [alert show];
-//            break;}
-//        case MessageComposeResultSent:
-//            break;
-//        default:
-//            break;
-//    }
-//}
 
 -(void) addObserver:(id <Observer>) observer {
     if (![sharedInstance observers]) {
