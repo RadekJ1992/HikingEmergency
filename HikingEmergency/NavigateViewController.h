@@ -23,6 +23,7 @@
 @property (nonatomic,strong) CMMotionActivityManager *motionActivityManager;
 @property (weak) NSTimer *timer;
 @property (nonatomic) BOOL isCurrentlyStationary;
+@property (nonatomic) BOOL isSOS;
 @property (weak, nonatomic) IBOutlet UIButton *StartStopButton;
 @property (strong, nonatomic) UIAlertView* routeAlert;
 @property (strong, nonatomic) UIAlertView* smsAlert;

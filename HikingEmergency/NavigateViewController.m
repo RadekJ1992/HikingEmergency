@@ -24,6 +24,7 @@
 @synthesize timer;
 @synthesize routeAlert;
 @synthesize smsAlert;
+@synthesize isSOS;
 
 /**
  obsługa przekazywania obiektów między viewControllerami
@@ -84,7 +85,9 @@
              timer = nil;
          }
      }];
-    
+    if ([self isSOS]) {
+        [[LocationsController getSharedInstance] sendEmergencyWithLastKnownLocation];
+    }
     [self drawLines:self];
 }
 
@@ -179,7 +182,7 @@
 
 -(void) notifySms {
     [self setSmsAlert:[[UIAlertView alloc] initWithTitle:@"Can't connect using TCP connection"
-                                                           message:@"Do you want to send location via SMS>"
+                                                           message:@"Do you want to send location via SMS?"
                                                           delegate:self
                                                  cancelButtonTitle:@"No"
                                                  otherButtonTitles:@"Yes" ,nil]];
@@ -189,10 +192,11 @@
 
 -(void) notifyRoute {
     [self setRouteAlert:[[UIAlertView alloc] initWithTitle:@"Get back on track!"
-                                                             message:@"You are too far away from route"
-                                                            delegate:self
-                                                   cancelButtonTitle:@"OK"
-                                                   otherButtonTitles:@"Help Me!" ,nil]];
+                                                   message:@"You are too far away from route"
+                                                  delegate:self
+                                         cancelButtonTitle:@"OK"
+                                         otherButtonTitles:@"Help Me!"
+                                                          ,nil]];
     //if not display alert window
    [[self routeAlert] show];
 }
@@ -210,6 +214,8 @@
         [contactsPhoneNumbers addObject:[[LocationsController getSharedInstance] emergencyPhoneNumber]];
         controller.recipients = contactsPhoneNumbers;
         [controller setMessageComposeDelegate: self];
+        
+        [self presentViewController:controller animated:YES completion:nil];
     } else {
         NSLog(@"Can't send SMS");
     }
@@ -235,6 +241,7 @@
         default:
             break;
     }
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

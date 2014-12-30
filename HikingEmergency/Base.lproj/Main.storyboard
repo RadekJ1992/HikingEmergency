@@ -127,13 +127,16 @@
                                 <state key="normal" title="SOS">
                                     <color key="titleColor" red="1" green="0.0" blue="0.035351606610000003" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="SOSclicked:" destination="Dkp-Jo-lux" eventType="touchUpInside" id="1oQ-US-gFu"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zz6-fj-lrc">
                                 <rect key="frame" x="0.0" y="402" width="320" height="53"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <state key="normal" title="I'm OK"/>
                                 <connections>
-                                    <segue destination="QvS-Te-Mqb" kind="modal" identifier="imOk" id="lgS-9o-6bK"/>
+                                    <action selector="ImOKclicked:" destination="Dkp-Jo-lux" eventType="touchUpInside" id="zRG-KX-wkK"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="60" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="rxn-BU-44c">
@@ -147,6 +150,8 @@
                     <navigationItem key="navigationItem" id="hv9-8b-dOp"/>
                     <connections>
                         <outlet property="timeLeft" destination="rxn-BU-44c" id="HgL-Vd-e6q"/>
+                        <segue destination="QvS-Te-Mqb" kind="modal" identifier="SOS" id="kWN-AI-KjI"/>
+                        <segue destination="QvS-Te-Mqb" kind="modal" identifier="imOk" id="idV-VM-K5c"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XcK-63-u3t" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -236,6 +241,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="GM0-jT-dAc"/>
                     <connections>
                         <outlet property="StartStopButton" destination="grb-JV-EzT" id="bTV-rW-Rm9"/>
                         <outlet property="mapView" destination="JoH-zO-rbR" id="qpk-F0-1Gk"/>
@@ -254,6 +260,6 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="YiC-tS-Y5i"/>
-        <segue reference="lgS-9o-6bK"/>
+        <segue reference="idV-VM-K5c"/>
     </inferredMetricsTieBreakers>
 </document>

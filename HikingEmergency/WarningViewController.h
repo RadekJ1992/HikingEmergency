@@ -15,9 +15,12 @@
 
 @property (weak) NSTimer *timer;
 @property (weak, nonatomic) IBOutlet UITextField *timeLeft;
+@property (strong) AVAudioPlayer *audioPlayer;
 /**
  wybrana trasa
  */
 @property (strong, nonatomic) Route* route;
+- (IBAction)SOSclicked:(id)sender;
+- (IBAction)ImOKclicked:(id)sender;
 
 @end
