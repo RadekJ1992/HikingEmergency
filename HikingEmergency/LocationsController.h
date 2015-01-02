@@ -45,4 +45,6 @@
 - (void)sendEmergencyWithLastKnownLocation;
 
 - (NSString*)getLastLocationMessage;
+
+- (NSString*)getEmergencyWithLastLocation;
 @end

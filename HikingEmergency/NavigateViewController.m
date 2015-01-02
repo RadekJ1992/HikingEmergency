@@ -155,8 +155,9 @@
     }
 }
 
-- (IBAction)test:(id)sender {
-    [self notifyRoute];
+- (IBAction)SOSClicked:(id)sender {
+    [[LocationsController getSharedInstance] sendEmergencyWithLastKnownLocation];
+    [self sendSMSWithMessage:[[LocationsController getSharedInstance] getEmergencyWithLastLocation]];
 }
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
@@ -167,6 +168,7 @@
         else if (buttonIndex == 1) {
             NSLog(@"Help Me! Tapped. Sending Emergency!");
             [[LocationsController getSharedInstance] sendEmergencyWithLastKnownLocation];
+            [self SOSClicked:self];
         }
     }
     if (alertView == [self smsAlert]) {
@@ -197,7 +199,6 @@
                                          cancelButtonTitle:@"OK"
                                          otherButtonTitles:@"Help Me!"
                                                           ,nil]];
-    //if not display alert window
    [[self routeAlert] show];
 }
 

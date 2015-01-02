@@ -8,7 +8,7 @@
         <!--mainMenu-->
         <scene sceneID="ORH-k0-L5a">
             <objects>
-                <viewController title="mainMenu" id="k7h-gM-iyk" sceneMemberID="viewController">
+                <viewController title="mainMenu" id="k7h-gM-iyk" customClass="MainMenuViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="flE-OX-Po7"/>
                         <viewControllerLayoutGuide type="bottom" id="5yT-Ou-uyg"/>
@@ -36,6 +36,9 @@
                                 <state key="normal" title="SOS">
                                     <color key="titleColor" red="1" green="0.0" blue="0.035351606611023989" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="SOSClicked:" destination="k7h-gM-iyk" eventType="touchUpInside" id="vWG-2V-cy4"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -220,7 +223,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="JoH-zO-rbR">
-                                <rect key="frame" x="20" y="67" width="280" height="481"/>
+                                <rect key="frame" x="20" y="123" width="280" height="437"/>
                             </mapView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VHd-6Z-Yh2">
                                 <rect key="frame" x="0.0" y="20" width="110" height="53"/>
@@ -236,6 +239,16 @@
                                 <state key="normal" title="Start"/>
                                 <connections>
                                     <action selector="StartStopButtonPressed:" destination="QvS-Te-Mqb" eventType="touchUpInside" id="Zi2-Ke-2TN"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iS1-Mo-0Lc">
+                                <rect key="frame" x="0.0" y="62" width="320" height="53"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="41"/>
+                                <state key="normal" title="SOS">
+                                    <color key="titleColor" red="1" green="0.0" blue="0.035351606610000003" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="SOSClicked:" destination="QvS-Te-Mqb" eventType="touchUpInside" id="HGw-7J-NvQ"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -260,6 +273,6 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="YiC-tS-Y5i"/>
-        <segue reference="idV-VM-K5c"/>
+        <segue reference="AwX-w2-ss0"/>
     </inferredMetricsTieBreakers>
 </document>

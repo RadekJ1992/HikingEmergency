@@ -29,5 +29,6 @@
 @property (strong, nonatomic) UIAlertView* smsAlert;
 
 - (IBAction)StartStopButtonPressed:(id)sender;
+- (IBAction)SOSClicked:(id)sender;
 
 @end

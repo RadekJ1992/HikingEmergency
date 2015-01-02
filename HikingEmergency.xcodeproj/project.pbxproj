@@ -31,6 +31,7 @@
 		458F316519E932480003B89D /* NavigateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 458F316419E932480003B89D /* NavigateViewController.m */; };
 		458F316819E9357B0003B89D /* WarningViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 458F316719E9357B0003B89D /* WarningViewController.m */; };
 		45B885E71A19181B00FB2728 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45B885E61A19181B00FB2728 /* CoreMotion.framework */; };
+		45BA3D2A1A56FE0D00F08A23 /* MainMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 45BA3D291A56FE0D00F08A23 /* MainMenuViewController.m */; };
 		45C1088A1A27925F00918AA9 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 45C108871A27925F00918AA9 /* GCDAsyncSocket.m */; };
 		45C1088B1A27925F00918AA9 /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 45C108891A27925F00918AA9 /* GCDAsyncUdpSocket.m */; };
 /* End PBXBuildFile section */
@@ -87,6 +88,8 @@
 		458F316719E9357B0003B89D /* WarningViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WarningViewController.m; sourceTree = "<group>"; };
 		45988BCA1A3F5A9E004AF717 /* libcommonCrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcommonCrypto.dylib; path = usr/lib/system/libcommonCrypto.dylib; sourceTree = SDKROOT; };
 		45B885E61A19181B00FB2728 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		45BA3D281A56FE0D00F08A23 /* MainMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenuViewController.h; sourceTree = "<group>"; };
+		45BA3D291A56FE0D00F08A23 /* MainMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainMenuViewController.m; sourceTree = "<group>"; };
 		45C108861A27925F00918AA9 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
 		45C108871A27925F00918AA9 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
 		45C108881A27925F00918AA9 /* GCDAsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncUdpSocket.h; sourceTree = "<group>"; };
@@ -176,6 +179,8 @@
 				458D93221A1909A200A8464A /* Sounds */,
 				458D43AA1A51C301007E10CA /* Observer.h */,
 				458D43AB1A51C321007E10CA /* Observed.h */,
+				45BA3D281A56FE0D00F08A23 /* MainMenuViewController.h */,
+				45BA3D291A56FE0D00F08A23 /* MainMenuViewController.m */,
 			);
 			path = HikingEmergency;
 			sourceTree = "<group>";
@@ -338,6 +343,7 @@
 				458F315F19E930270003B89D /* RoutesListViewController.m in Sources */,
 				45C1088B1A27925F00918AA9 /* GCDAsyncUdpSocket.m in Sources */,
 				45736DA419D9C9DA00A485D6 /* AppDelegate.m in Sources */,
+				45BA3D2A1A56FE0D00F08A23 /* MainMenuViewController.m in Sources */,
 				45373BA61A17E7BB00B9D9CB /* LocationsController.m in Sources */,
 				458F316219E932370003B89D /* CreateRouteViewController.m in Sources */,
 				45736DA119D9C9DA00A485D6 /* main.m in Sources */,

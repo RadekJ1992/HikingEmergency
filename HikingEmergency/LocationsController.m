@@ -112,6 +112,7 @@ static dispatch_queue_t socketQueue;
         NSData *data;
         if ([sharedInstance isFirstLocation]) {
             message = [sharedInstance getHiWithLastLocation];
+            [sharedInstance setIsFirstLocation:NO];
         } else {
             message = [sharedInstance getLastLocationMessage];
         }
