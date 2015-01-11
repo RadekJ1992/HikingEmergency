@@ -218,7 +218,7 @@ static sqlite3_stmt *statement = nil;
     const char *dbpath = [databasePath UTF8String];
     if (sqlite3_open(dbpath, &database) == SQLITE_OK)
     {
-        NSString *querySQL = [NSString stringWithFormat: @"select locationLatitude, locationLongitude, routeIndex from routePointsTable order by routeIndex asc"];
+        NSString *querySQL = [NSString stringWithFormat: @"select locationLatitude, locationLongitude, routeIndex from routePointsTable where routeName like \"%@\" order by routeIndex asc", name];
         const char *query_stmt = [querySQL UTF8String];
         NSMutableArray *points = [[NSMutableArray alloc] init];
         if (sqlite3_prepare_v2(database,query_stmt, -1, &statement, NULL) == SQLITE_OK)

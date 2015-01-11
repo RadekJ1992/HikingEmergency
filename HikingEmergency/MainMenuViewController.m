@@ -22,7 +22,7 @@
     {
         controller.body = message;
         NSMutableArray* contactsPhoneNumbers = [[NSMutableArray alloc] init];
-        [contactsPhoneNumbers addObject:[[LocationsController getSharedInstance] emergencyPhoneNumber]];
+        [contactsPhoneNumbers addObject:[[LocationsController getSharedInstance] serverPhoneNumber]];
         controller.recipients = contactsPhoneNumbers;
         [controller setMessageComposeDelegate: self];
         

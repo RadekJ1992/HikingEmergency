@@ -34,6 +34,7 @@
 @property (weak, nonatomic) NSString* serverUDPPort;
 @property (weak, nonatomic) NSString* phoneNumber;
 @property (weak, nonatomic) NSString* emergencyPhoneNumber;
+@property (weak, nonatomic) NSString* serverPhoneNumber;
 @property (strong, nonatomic) NSMutableArray* observers;
 
 @property (nonatomic) BOOL isNavigating;

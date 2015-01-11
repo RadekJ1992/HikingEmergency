@@ -8,6 +8,18 @@
 			<key>Type</key>
 			<string>PSTextFieldSpecifier</string>
 			<key>Title</key>
+			<string>Numer Aplikacji Monitorującej</string>
+			<key>KeyboardType</key>
+			<string>NumberPad</string>
+			<key>DefaultValue</key>
+			<string>725231861</string>
+			<key>Key</key>
+			<string>serverPhoneNumber</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSTextFieldSpecifier</string>
+			<key>Title</key>
 			<string>Port UDP Serwera</string>
 			<key>Key</key>
 			<string>serverUDPPort</string>
@@ -60,7 +72,7 @@
 			<key>KeyboardType</key>
 			<string>NumberPad</string>
 			<key>DefaultValue</key>
-			<string>725231861</string>
+			<string>513829402</string>
 			<key>Key</key>
 			<string>emergencyPhoneNumber</string>
 		</dict>
@@ -74,7 +86,7 @@
 			<key>Key</key>
 			<string>radius</string>
 			<key>Title</key>
-			<string>Safety Radius</string>
+			<string>Maksymalna odległość od trasy</string>
 		</dict>
 	</array>
 	<key>StringsTable</key>

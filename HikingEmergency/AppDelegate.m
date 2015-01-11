@@ -25,10 +25,11 @@
     NSString * ip = [standardUserDefaults objectForKey:@"serverIP"];
     NSString * port = [standardUserDefaults objectForKey:@"serverPort"];
     NSString *phoneNumber = (NSString*)[[NSUserDefaults standardUserDefaults] valueForKey:@"emergencyPhoneNumber"];
+    NSString *serverPhoneNumber = (NSString*)[[NSUserDefaults standardUserDefaults] valueForKey:@"serverPhoneNumber"];
     NSNumberFormatter * formatter = [[NSNumberFormatter alloc] init];
     [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
     NSNumber * radius = [formatter numberFromString: [standardUserDefaults objectForKey:@"radius"]];
-    if (!ip || !port || !phoneNumber || !radius) {
+    if (!ip || !port || !phoneNumber || !radius || !serverPhoneNumber) {
         [self registerDefaultsFromSettingsBundle];
     }
     

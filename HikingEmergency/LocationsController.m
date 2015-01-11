@@ -45,6 +45,7 @@ static dispatch_queue_t socketQueue;
         [sharedInstance setServerUDPPort:[standardUserDefaults objectForKey:@"serverUDPPort"]];
         [sharedInstance setPhoneNumber: [standardUserDefaults objectForKey:@"userPhoneNumber"]];
         [sharedInstance setEmergencyPhoneNumber:[standardUserDefaults objectForKey:@"emergencyPhoneNumber"]];
+        [sharedInstance setServerPhoneNumber:[standardUserDefaults objectForKey:@"serverPhoneNumber"]];
         
         NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:30.0
                                                           target:self
@@ -209,7 +210,7 @@ static dispatch_queue_t socketQueue;
             float iy = (A1*(-C2) - A2*(-C1)) / (A1*B2 - A2*B1);
             
             if ((MIN(x1, x2) <= ix <= MAX(x1, x2)) && (MIN(y1, y2) <= iy <= MAX(y1, y2))) {
-                //situation when a projection of user's location point onto a line determined by two consecutive route points finds itself is placed on a segment between these two points
+                //situation when a projection of user's location point onto a line determined by two consecutive route points finds itself placed on a segment between these two points
                 
                 //count distance between user's location and route
                 CLLocation *intersectionLocation = [[CLLocation alloc] initWithLatitude:ix longitude:iy];
